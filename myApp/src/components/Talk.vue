@@ -1,6 +1,11 @@
 <template>
     <div>
-        <h1> {{hello}} </h1>
+        <h1> {{hello}}   </h1>
+        <div>  <input type="text" v-model="id" placeholder="Name" >  <button @click="checkName" > Approval </button> </div> 
+
+
+        <div v-if="isConfirmed" >
+
         <div><button @click="move('left')">Move Left</button>  </div> 
         <div><button @click="move('right')">Move Right</button> </div>  
         {{position}}
@@ -20,6 +25,8 @@
 
         <div><button @click="mydb('update-setup')">db update-setup</button> </div>  
 
+
+        </div>
     </div>
 </template>
 
@@ -37,7 +44,9 @@ export default {
             students: [],
             tables: [],
             isShow: false,
-            isShowStudent: false
+            isShowStudent: false,
+            isConfirmed: false,
+            id: ""
         }
     },
     created() {
@@ -71,6 +80,11 @@ export default {
 
     },
     methods: {
+        checkName() {
+            console.log('id:'+this.id)
+            if(this.id==="BandMaid")
+                this.isConfirmed=!this.isConfirmed;
+        },
         move(direction) {
             this.socket.emit("move",direction)
         },
@@ -95,4 +109,10 @@ export default {
         margin-top: 10px;
         margin-bottom: 4px;
     }
+    input {
+    margin-top: 5px;
+    width: 60px;
+    height: 20px;  
+    }
+
 </style>
