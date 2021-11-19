@@ -172,8 +172,10 @@ io.on("connection",socket=>{
                 break;
             case "create":
                 //db.run(`create table setup(ip text,van integer,dmode integer,pmode integer,literlimit integer, cost integer )`);
+                //let make simple adj tracking table
+                //db.run(`create table adj( code integer,pumpId integer, adj integer,date text )`);
                 db.close();
-                console.log('table setup created'+db)
+                console.log('table adj created'+db)
                 //console.log(db)
             
                 break;
@@ -182,8 +184,9 @@ io.on("connection",socket=>{
                 // db.run(`insert into setup values("192.168.0.101",1,1,1,99,90000)`, function (err) {
                 //     if (err) { return console.log(err.message); }
                 // });
+                db.run(`insert into adj values(100,1,1185,datetime('now','localtime'))`);                
                 db.close();
-                console.log('table setup values inserted')
+                console.log('table adj values inserted')
                 break;
             case "update-setup":
                 let ip="192.168.0.103"
@@ -194,5 +197,45 @@ io.on("connection",socket=>{
                 break;
                 
         }
+    })
+    socket.on("adj",data=>{
+        let db = new sqlite3.Database('./db/chinook.db');
+        let code=data.code
+        let id=data.id
+        let adj=data.adj
+        console.log('adj:'+code+' '+id+' '+adj)
+        db.run(`insert into adj values("${code}","${id}","${adj}",datetime('now','localtime'))`);                
+        db.close();
+        console.log('table adj values inserted')
+
+
+
+    })
+    socket.on("show-adj",data=>{
+        console.log('Let show adj db')
+        let db = new sqlite3.Database('./db/chinook.db');
+        sql = `select * from adj`;
+        let rowsArray=[]
+        db.all(sql, [], (err, rows) => {
+            if (err) {
+              throw err;
+            }
+            rows.forEach((row) => {
+              
+              console.log(row);
+              rowsArray.push(row)
+              //reply=row
+              //reply=rowsArray[0]
+      
+            });
+            db.close()
+            io.emit("show-adj-resp",rowsArray);
+
+      
+        });
+    
+
+
+
     })
 })

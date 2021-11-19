@@ -12,7 +12,7 @@
             <li> <b>Main B'd chipset</b>: S3C44B0X(160-QFP) </li>
             <li> <b>Daughter B'd(for KTC uSD) chipset</b>: AT91 ARM Thumb-based Microcontrollers AT91SAM7X256 100-lead LQFP </li>
             <li> <b>Interface B'd chipset</b>: High-Performance Cortex-M7 SAMe70n21b 100-lead LQFP </li>
-            <li> <b>Touch B'd</b>: Intel Bay trail Soc Chipset INX-N29 Motherboard </li>
+            <li> <b>Touch B'd</b>: Intel Bay trail Soc Chipset INX-N29 Motherboard mSATA ssd=32G ram=2G </li>
         </ul>
       <h2>Interface(Buffer) boot & app</h2>
         <ul>

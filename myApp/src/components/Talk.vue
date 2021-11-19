@@ -25,6 +25,16 @@
 
         <div><button @click="mydb('update-setup')">db update-setup</button> </div>  
 
+        <hr>
+        <input type="text" placeholder="code" v-model="adj_code">
+        <input type="text" placeholder="pump Id" v-model="adj_id">
+        <input type="text" placeholder="adj" v-model="adj_adj">
+        <button @click="addAdj">Add to db</button>
+        <br>
+        <button @click="showAdj">Show</button>
+        <ul>
+            <li v-for="(list,index) in adj_response " :key="index"> code={{list.code}} id={{list.id}} adj={{list.adj}} </li>
+        </ul>
 
         </div>
     </div>
@@ -46,7 +56,11 @@ export default {
             isShow: false,
             isShowStudent: false,
             isConfirmed: false,
-            id: ""
+            id: "",
+            adj_code: 0,
+            adj_id: 0,
+            adj_adj: 0,
+            adj_response : []
         }
     },
     created() {
@@ -56,6 +70,14 @@ export default {
     mounted() {
         //this.socket.emit("login",{name:'wj',userid:1234});
         //this.socket.emit("move","left");
+        this.socket.on("show-adj-resp",data=>{
+            this.adj_response=data
+            for(let i=0;i<data.length;i++) {
+                console.log('code='+ this.adj_response[i].code)
+
+            }
+            //console.log('x='+this.position.x+' y='+this.position.y)
+        })
         this.socket.on("position",data=>{
             this.position=data
             //console.log('x='+this.position.x+' y='+this.position.y)
@@ -98,6 +120,22 @@ export default {
             }
             else if(arg=='student') this.isShowStudent=!this.isShowStudent
             this.socket.emit("db",arg)
+        },
+        addAdj() {
+            let arg={}
+            arg.code=this.adj_code
+            arg.id=this.adj_id
+            arg.adj=this.adj_adj
+            console.log('addAdj:'+this.adj_code+' '+this.adj_id+' '+this.adj_adj)
+            //this.socket.emit("adj",{code:"100",id:"3",adj:"1000" } )
+            //this.socket.emit("adj",{code:this.adj_code,id:this.adj_id,adj:this.adj_adj } )
+            this.socket.emit("adj",arg )
+
+        },
+        showAdj() {
+            console.log('showAdj')
+            let arg={}
+            this.socket.emit("show-adj",arg )
         }
     }
 }
@@ -111,6 +149,7 @@ export default {
     }
     input {
     margin-top: 5px;
+    margin-right: 2px;
     width: 60px;
     height: 20px;  
     }
