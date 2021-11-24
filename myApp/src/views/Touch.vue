@@ -18,12 +18,16 @@
         <li>고급전원관리옵션 설정변경 ->하드디스끄기-> 사용안함</li>
       </ul>
       <li>설정=> 시스템->디스플레이-> 밝기변경 60%</li>
-      <li>원도우10 업데이트방지 셋팅이 필요</li>
+      <li>원도우10 최적화및 업데이트방지 셋팅이 필요</li>
       <ul>
         <li>services.msc -> windows update :: 수동->사용안함으로 셋팅</li>
         <li>gpedit.msc  -> 관리템플릿->windows 구성요소 ->windows 업데이트->자동업데이트구성 -> 사용안함</li>
         <li>gpedit.msc  -> 관리템플릿->시스템->인터넷통신관리 ->인터넷통신설정->모든 windows 업데이트기능에 액세스안함 ->사용</li>
-        <li>  <a href="https://itshareit.tistory.com/3">https://itshareit.tistory.com/3</a>:참조</li>
+        <li>내 PC 오른쪽마우스(손가락으로 길게 눌러) ->고급 시스템 속성 ->고급(탭) -> 성능(설정) -> 고급(탭) -> 가상메모리(변경)</li>
+          <ul>
+            <li>모든 드라이브에 대한 페이징 파일 크기 자동관리(체크해제) </li>
+            <li>페이징 파일없음(체크)</li>
+          </ul>
       </ul>
       <li>최신터치SW로 업데이트 한다(mainU.exe를 AryaStark/odt/release 에 복사한다)</li>
       <li>부팅메뉴 Advanced->Miscellaneous Configuration->Restore AC Power Loss ->Power On 으로 셋팅</li>

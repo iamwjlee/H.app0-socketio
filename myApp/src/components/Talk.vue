@@ -33,7 +33,11 @@
         <br>
         <button @click="showAdj">Show</button>
         <ul>
-            <li v-for="(list,index) in adj_response " :key="index"> code={{list.code}} id={{list.id}} adj={{list.adj}} </li>
+            <li v-for="(list,index) in adj_response " :key="index"> 
+                code={{list.code}} 
+                id={{list.pumpId}} 
+                adj={{list.adj}} 
+                date={{list.date}} </li>
         </ul>
 
         </div>
