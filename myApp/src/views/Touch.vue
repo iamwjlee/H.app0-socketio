@@ -1,5 +1,9 @@
 <template>
   <div class="touch">
+    <a href="#one">터치보드 원도10설치후</a> <br>
+    <a href="#two">AryaStark 디렉토리구조</a> <br>
+    <a href="#three">JPOS5000(일체형) uSD 갱신및 기물추가</a> <br>
+    <div id="one">
     <h2>터치보드 원도10설치후</h2>
     <ol>
       <li>원도우10 설치후에 c: 드라이브에 AryaStark 폴더를 카피한다</li>
@@ -36,7 +40,8 @@
         <li>설정->업데이트및보안->Windows 보안->바이러스및 위협방지->설정관리 -> 제외추가또는 제거->제외사항추가 ->C:\AryaStark 폴더를 제외항목에 추가한다!</li>
       </ul>
     </ol>
-    
+    </div>
+    <div id="two">
     <h2>AryaStark 디렉토리구조</h2>
     <ul>
       <li>\ezhelp : 원격</li>
@@ -56,7 +61,9 @@
         <li>Client.exe를 실행시키면 사무실컴퓨터(192.168.0.79)에서 파일을 읽어오고 터치SW를 재실행한다.</li>
       </ul>
     </ul>
+    </div>
 
+    <div id="three">
     <h2>JPOS5000(일체형) uSD 갱신및 기물추가</h2> 
     <ol>
       <li>JPOS5000신형의 uSD카드 인증서등록</li>
@@ -72,6 +79,7 @@
       </ul>
       <li>나머지는 기존(JPOS3000)과 동일합니다.</li>
     </ol>
+    </div>
     
   </div>
 </template>

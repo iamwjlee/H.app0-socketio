@@ -40,15 +40,83 @@
                 date={{list.date}} </li>
         </ul>
 
+        <div class="container mt-3">
+            <h2>Bootstrap5 basic table</h2>
+            <p>basic .table class adds basic styling(light padding and horizontal dividers) to a table</p>
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th>CODE</th>
+                    <th>ID</th>
+                    <th>ADJ</th>
+                    <th>DATE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(list,index) in adj_response" :key="index" >
+                    <td> {{list.code}} </td>
+                    <td> {{list.pumpId}} </td>
+                    <td> {{list.adj}} </td>
+                    <td> {{list.date}} </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <!-- <div v-if="isGood">
+            <vue-good-table 
+                :columns="columns"
+                :rows="adj_response"
+            />
+        </div> -->
+        <!-- <table-lite
+            :is-loading="table.isLoading"
+            :columns="table.columns"
+            :adj_response="table.rows"
+            :total="table.totalRecordCount"
+            :sortable="table.sortable"
+            />  -->
+
         </div>
     </div>
 </template>
 
 <script>
+// 테이블하면 생각나는것은? 정답 부트스트랩
+// bootstrap 4 5 diff
+
+    // static site generator : 
+    // Bootstrap 4 uses Jekyll software 
+    // Bootstrap 5 user Hugo software
 import io from "socket.io-client"
+//
+// import 'vue-good-table/dist/vue-good-table.css'
+// import {VueGoodTable} from 'vue-good-table'
+// import TableLite from 'vue3-table-lite'
+// import '@ocrv/vue-tailwind-pagination/dist/style.css'
+// import VueTailwindPagination from '@ocrv/vue-tailwind-pagination'
 export default {
     name: 'Talk',
+    components: {
+        //VueGoodTable,
+        // TableLite,
+        // VueTailwindPagination,
+    },
     data() {
+        // const table=reactive({
+        //     isLoading: false,
+        //     columns: [
+
+        //     ],
+        //     rows: [],
+        //     totalRecordCound:   0,
+        //     sortable: {
+        //         oreder:"id",
+        //         sort: "asc"
+        //     }
+        // }
+
+        // )
         return {
             hello: 'Talk Component!',
             socket: {},
@@ -58,13 +126,29 @@ export default {
             students: [],
             tables: [],
             isShow: false,
+            isGood: false,
             isShowStudent: false,
             isConfirmed: false,
             id: "",
             adj_code: 0,
             adj_id: 0,
             adj_adj: 0,
-            adj_response : []
+            adj_response : [],
+            // columns:[
+            //     {
+            //         label: 'code',
+            //         field: 'code',
+            //         type: 'number'
+            //     },
+            //     {
+            //         label: 'id',
+            //         field: 'id',
+            //         type: 'number'
+            //     },
+
+            // ]
+
+
         }
     },
     created() {
@@ -140,6 +224,7 @@ export default {
             console.log('showAdj')
             let arg={}
             this.socket.emit("show-adj",arg )
+            this.isGood=!this.isGood
         }
     }
 }

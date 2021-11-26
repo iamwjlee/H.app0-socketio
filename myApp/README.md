@@ -12,8 +12,8 @@
 - make file app.js to show 'Hello'
 - npm run start
 - npm run serve -- --port 1604
-
-
+- let try vue-good-table 
+- https://www.learmoreseekmore.com/2021/02/vue3-vue-tailwind-pagination.html
 ## Project setup
 ```
 npm install
