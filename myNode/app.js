@@ -132,7 +132,7 @@ io.on("connection",socket=>{
     socket.on("db",data=>{
         let db = new sqlite3.Database('./db/chinook.db');
 
-        switch(data) {
+        switch(data) { //db+student,tables,create,insert,update-setup
             case "student":
                 sql = `select *,rowid from student`;
                 let rowsArray=[]
@@ -197,6 +197,18 @@ io.on("connection",socket=>{
                 break;
                 
         }
+    })
+    socket.on("adj-delete",data=>{
+        let db = new sqlite3.Database('./db/chinook.db');
+        let order={};
+        order.code=data.code
+        order.pumpId=data.pumpId
+
+        //delete from adj where code=10 and pumpId=1;
+        db.run(`delete from adj where code="${data.code}" and pumpId="${data.pumpId}"`);                
+
+        db.close();
+        console.log('adj-delete:: code='+order.code+' pumpid='+order.pumpId)
     })
     socket.on("adj",data=>{
         let db = new sqlite3.Database('./db/chinook.db');

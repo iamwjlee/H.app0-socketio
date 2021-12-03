@@ -1,8 +1,13 @@
 <template>
   <div class="touch">
-    <a href="#one">터치보드 원도10설치후</a> <br>
+    
+    <div style="text-align: center">
+    <a href="#one">터치보드 원도10설치후^</a> <br>
     <a href="#two">AryaStark 디렉토리구조</a> <br>
     <a href="#three">JPOS5000(일체형) uSD 갱신및 기물추가</a> <br>
+    </div>
+    <br>
+    <br>
     <div id="one">
     <h2>터치보드 원도10설치후</h2>
     <ol>
@@ -41,6 +46,8 @@
       </ul>
     </ol>
     </div>
+
+    <br>
     <div id="two">
     <h2>AryaStark 디렉토리구조</h2>
     <ul>
@@ -63,6 +70,7 @@
     </ul>
     </div>
 
+    <br>
     <div id="three">
     <h2>JPOS5000(일체형) uSD 갱신및 기물추가</h2> 
     <ol>

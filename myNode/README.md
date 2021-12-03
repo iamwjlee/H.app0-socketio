@@ -2,6 +2,10 @@
 > npm init -y
 > npm i socket.io express --save
 > npm i sqlite3 --save
+```
+ node app.js : Listening on 1705
+```
+
 
 #sqlite3
 ```
@@ -12,4 +16,5 @@
  create table setup2(ip text,van integer,time DEFAULT(datetime('now','localtime')) );
  insert into setup2 values("192.168.0.101",1,datetime('now','localtime'));
  select * from adj where code=100;
+ delete from adj where code=0 and pumpId=0;
 ```

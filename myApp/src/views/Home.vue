@@ -1,10 +1,15 @@
 <template>
   <div class="home">
     <talk />
+    <br>
+    <hr>
     <h2>검량시 기차값과 실제무게에 대한 관계</h2>
     <div>  <input type="text" v-model="inputAdj" placeholder="입력대기" > <span>Input Adj</span> </div> 
     <div>  <input type="text" v-model="outputRealGram" > <span>Real(gram)</span></div> 
     <button v-on:click="OnCalc" >Calculator</button>
+    <hr>
+    <br>
+    <br>
 
     <h1>JPOS3000-KIOSK</h1>
       <h2>board information </h2>

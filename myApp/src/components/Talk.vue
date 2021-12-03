@@ -1,37 +1,78 @@
 <template>
     <div>
         <h1> {{hello}}   </h1>
-        <div>  <input type="text" v-model="id" placeholder="Name" >  <button @click="checkName" > Approval </button> </div> 
+        <div class="m-2">  
+        <input type="text" class="form-control m-1" v-model="id" placeholder="Name" >  
+        <button class="btn btn-primary m-1" @click="checkName" > Approval </button> 
+        </div> 
 
 
         <div v-if="isConfirmed" >
 
-        <div><button @click="move('left')">Move Left</button>  </div> 
-        <div><button @click="move('right')">Move Right</button> </div>  
+        <div class="m-2">
+        <button class="btn btn-primary m-1" @click="move('left')">Move Left</button> 
+        <button class="btn btn-primary m-1" @click="move('right')">Move Right</button>
         {{position}}
+
+        </div>
         <br>
-        <div><button @click="mydb('student')">db students</button> </div>  
+
+        <div>
+            <button class="btn btn-primary m-1" @click="mydb('student')">db students</button> 
+        </div>  
         <ul v-if="isShowStudent">
             NumberofStudent is {{students.length}}
             <li v-for="(list,index) in students" :key="index" > id={{list.id}}  name={{list.name}} </li>
         </ul>
-        <div><button @click="mydb('tables')">db all table</button> </div>  
+        <div>
+            <button class="btn btn-primary m-1" @click="mydb('tables')">db all table</button> 
+        </div>  
         <ul v-if="isShow">
             NumberofTables is {{tables.length}}
             <li v-for="(list,index) in tables" :key="index" > name={{list.name}} </li>
         </ul>
-        <div><button @click="mydb('create')">db create table</button> </div>  
-        <div><button @click="mydb('insert')">db insert table</button> </div>  
+        <div>
+            <button class="btn btn-primary m-1" @click="mydb('create')">db create table</button> 
+        </div>  
+        <div>
+            <button class="btn btn-primary m-1" @click="mydb('insert')">db insert table</button> 
+        </div>  
 
-        <div><button @click="mydb('update-setup')">db update-setup</button> </div>  
+        <div>
+            <button class="btn btn-primary m-1" @click="mydb('update-setup')">db update-setup</button> 
+        </div>  
 
-        <hr>
-        <input type="text" placeholder="code" v-model="adj_code">
-        <input type="text" placeholder="pump Id" v-model="adj_id">
-        <input type="text" placeholder="adj" v-model="adj_adj">
-        <button @click="addAdj">Add to db</button>
+        <!-- <div class="m-3"> -->
+            <label class="me-1">BandMaid</label>
+            <input type="text"  class="form-control" placeholder="Just do it">
+        <!-- </div> -->
+
+        <!-- 시작하기 adj -->
+        <hr> 
+        <div class="m-2">
+        <label class="m-1">code</label>
+        <input class="form-control m-1"  type="text" placeholder="code" v-model="adj_code" >
+        <label class="m-1">id</label>
+        <input class="form-control m-1" type="text" placeholder="pump Id" v-model="adj_id">
+        <label class="m-1">adj</label>
+        <input class="form-control m-1" type="text" placeholder="adj" v-model="adj_adj">
+
+        </div>
+
+        <div class="m-2">
+        <button class="btn btn-primary m-1" @click="addAdj">Add to db</button>
+        <button class="btn btn-primary m-1">add1</button>
+        <button class="btn btn-outline-secondary m-1">add2</button>
+
+        </div>
+
         <br>
-        <button @click="showAdj">Show</button>
+        <br>
+        <div class="m-2">
+        <button @click="showAdj" class="btn btn-outline-secondary m-1">Show</button>
+
+        </div>
+        
         <ul>
             <li v-for="(list,index) in adj_response " :key="index"> 
                 code={{list.code}} 
@@ -53,15 +94,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(list,index) in adj_response" :key="index" >
+                <tr v-for="(list,index) in visible_adj_response" :key="index" >
                     <td> {{list.code}} </td>
                     <td> {{list.pumpId}} </td>
                     <td> {{list.adj}} </td>
                     <td> {{list.date}} </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm m-1" @click="removeRow(index)" >remove row</button>
+                        <!-- <button class="btn btn-danger btn-sm m-1" >remove row</button> -->
+                    </td>
                 </tr>
             </tbody>
         </table>
+        <p>total page= {{currentPage+1}} of {{totalPages()}} </p>
+        <button class="btn btn-outline-secondary  p-1 m-1" @click="showPage"> show page </button>
+        <button class="btn btn-outline-secondary  p-1 m-1" @click="next"> ++ </button>
+        <button class="btn btn-outline-secondary  p-1 m-1" @click="prev"> -- </button>
+
         </div>
+        <!-- 마지막부분 -->
+        <hr> 
 
         <!-- <div v-if="isGood">
             <vue-good-table 
@@ -130,10 +182,18 @@ export default {
             isShowStudent: false,
             isConfirmed: false,
             id: "",
-            adj_code: 0,
-            adj_id: 0,
-            adj_adj: 0,
-            adj_response : [],
+            adj_code: "",
+            adj_id: "",
+            adj_adj: "",
+            adj_response : [], //실제데이터
+
+            //배열의 일부분을 잘라내어 새로운 배열로 리턴한다.
+            visible_adj_response: [], //pagnation
+            currentPage: 0,
+            pageSize:5,
+
+
+
             // columns:[
             //     {
             //         label: 'code',
@@ -155,6 +215,9 @@ export default {
         //this.socket =io("http://127.0.0.1:3000"); //How to deal with Cross Origin Resource Sharing
         this.socket =io("http://106.245.87.140:1605"); //How to deal with Cross Origin Resource Sharing
     },
+    beforeMount() {
+        console.log('beforeMount')
+    },
     mounted() {
         //this.socket.emit("login",{name:'wj',userid:1234});
         //this.socket.emit("move","left");
@@ -164,6 +227,8 @@ export default {
                 console.log('code='+ this.adj_response[i].code)
 
             }
+            this.showPage()
+
             //console.log('x='+this.position.x+' y='+this.position.y)
         })
         this.socket.on("position",data=>{
@@ -190,6 +255,41 @@ export default {
 
     },
     methods: {
+        removeRow(index) {  //https://codepen.io/jjelic/pen/yevNLZ?editors=1010
+            console.log('addRow index='+index + ' page='+ (this.currentPage*this.pageSize)*1 +' index='+index)
+            let order=parseInt(this.currentPage*this.pageSize+index)
+            console.log('order='+order)
+            console.log('delete id='+this.adj_response[order].code + ' pumpId='+this.adj_response[order].pumpId)
+            this.socket.emit("adj-delete",{code:this.adj_response[order].code,pumpId:this.adj_response[order].pumpId })
+            this.adj_response.splice(order,1)
+            this.showPage()
+
+        },
+        next() {
+            let t=this.totalPages();
+            if(this.currentPage<t-1) {
+                this.currentPage++;
+            }
+            console.log('total page='+t + ' current page='+ this.currentPage)
+            this.showPage()
+
+        },
+        prev() {
+           if(this.currentPage>0) {
+               this.currentPage--
+           }
+           this.showPage()
+        },
+        totalPages() {
+            return Math.ceil(this.adj_response.length/this.pageSize)
+        },
+        showPage() {
+            const page=this.currentPage*this.pageSize;
+            this.visible_adj_response=this.adj_response.slice(page,page+this.pageSize)
+            for(let i=0;i<this.visible_adj_response.length;i++)
+                console.log(this.visible_adj_response[i].adj)
+            
+        },
         checkName() {
             console.log('id:'+this.id)
             if(this.id==="BandMaid")
@@ -225,22 +325,23 @@ export default {
             let arg={}
             this.socket.emit("show-adj",arg )
             this.isGood=!this.isGood
+
         }
     }
 }
 </script>
 <style scoped>
-    button {
+    /* button {
         width: auto;
         padding: 4px 2px;
         margin-top: 10px;
         margin-bottom: 4px;
-    }
-    input {
+    } */
+    /* input {
     margin-top: 5px;
     margin-right: 2px;
     width: 60px;
     height: 20px;  
-    }
+    } */
 
 </style>
