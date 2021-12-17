@@ -1,13 +1,40 @@
 <template>
   <div class="home">
-    <talk />
+
+
+    <!-- <button @click="boxTest">box</button>
+    <div class="box orange"></div> -->
+
+
+    <a href="#gsap">GSAP</a> <br>
+
+    <div v-if="HomeTransitionTest">
+      <button @click='display=!display'>Display</button>
+      <div 
+        class="initialStyle"
+        :class='{newStyle:display }'
+      >
+      </div>
+      <transition name="demo">
+        
+      <h3 v-if='display'>transition classes</h3>
+      <!-- <h4 v-else>another element</h4> -->
+      </transition>
+    </div>
+    <div v-else>HomeTransitionTest not defined</div>
+
+    <button @click="option">option</button>
+    <!-- <talk text="Talk Component" colorText="blue" /> -->
     <br>
     <hr>
-    <h2>검량시 기차값과 실제무게에 대한 관계</h2>
+
+    <h2 @click="adjRelation" class="adjR">검량시 기차값과 실제무게에 대한 관계</h2>
     <div>  <input type="text" v-model="inputAdj" placeholder="입력대기" > <span>Input Adj</span> </div> 
     <div>  <input type="text" v-model="outputRealGram" > <span>Real(gram)</span></div> 
     <button v-on:click="OnCalc" >Calculator</button>
+    
     <hr>
+    
     <br>
     <br>
 
@@ -65,27 +92,59 @@
     <img src="../assets/rs485.jpg" alt="" width="400"  > -->
 
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+
+    <div id="gsap">
+      <p>About gsap</p>
+    </div>
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 //import HelloWorld from '@/components/HelloWorld.vue'
-import Talk from '../components/Talk.vue'
+// import Talk from '../components/Talk.vue'
+
+import gsap from 'gsap'
 export default {
   name: 'Home',
   components: {
-    Talk,
+    // Talk,
     //HelloWorld
   },
   data() {
     return {
       inputAdj:"",
       outputRealGram:"",
-      result:""
+      result:"",
+      display: true,
+      HomeTransitionTest: false,
     }
   },
   methods: {
+    option() {
+      console.log('option')
+    },
+    boxTest() {
+      console.log('boxTest')
+        // gsap.from(".box",{ duration:1,rotationX:0    })
+        // gsap.to(".box",{ duration:1,rotationX:180    })
+        gsap.from(".box",{ duration:1,rotationX:0    })
+        gsap.to(".box",{ duration:1,rotationX:180    })
+
+    },
+    // beforeEnter(el) {
+    //   console.log(el)
+    //   console.log('beforeEnter')
+
+    // },
+    // enter(el) {
+    //   console.log(el)
+    //   console.log('enter')
+    // },
+    adjRelation() {
+      console.log('click ajd')
+    },
     OnCalc() {
       if(parseInt(this.inputAdj)>0) {
         let c;
@@ -107,6 +166,17 @@ export default {
 </script>
 
 <style scoped>
+
+.box {
+    display: block;
+}
+.orange {
+    width: 30px;
+    height: 30px;
+    background: orange;
+}
+
+
 button {
   width: auto;
   margin-top: 10px;
@@ -118,4 +188,56 @@ input {
   width: 60px;
   height: 20px;  
 }
+.adjR:hover {
+  background: #8f8f8f;
+}
+
+.initialStyle {
+  width: 100px;
+  height: 100px;
+  background: #8f8f8f;
+  transition: all 2s ease;
+}
+.newStyle {
+  width: 100px;
+  height: 100px;
+  background: #8f0000;
+  transform: translateX(100px) translateY(100px) rotate(720deg) scale(0.5)
+
+}
+
+h3 {
+  background:tomato;
+  color: #ffffff;
+  padding: 25px;
+  text-align: center;
+}
+
+h4 {
+  background:mediumslateblue;
+  color: #ffffff;
+  padding: 25px;
+  text-align: center;
+}
+
+.demo-enter-from {
+  background: blue;
+}
+.demo-enter-active {
+  transition: all 5s ease
+}
+.demo-enter-to {
+  /* background: green; */
+}
+.demo-leave-from {
+  /* background: black; */
+}
+.demo-leave-active {
+  transition: all 5s ease;
+}
+.demo-leave-to {
+  background: yellow;
+}
+
+
 </style>

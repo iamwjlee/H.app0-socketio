@@ -10,6 +10,7 @@
   "dependencies": {
     "@ocrv/vue-tailwind-pagination": "^0.0.4",
     "core-js": "^3.6.5",
+    "gsap": "^3.8.0",
     "socket.io": "^4.3.2",
     "socket.io-client": "^4.3.2",
     "vue": "^3.0.0",

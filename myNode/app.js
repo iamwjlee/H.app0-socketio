@@ -7,10 +7,62 @@ const sqlite3=require('sqlite3').verbose();
 let io=require('socket.io')(server,{cors:{origin:"*"}})
 
 
-
+//org 1605
 server.listen(1605,()=>{
-    console.log('Listening on port 1605')
+    console.log('Http & Socket.io ready for Listening on port 1605')
 })
+
+
+let freerunning=0
+//var clients=[]
+let responseMsg
+const net=require('net')
+const tcp=net.createServer(client=>{
+    freerunning++
+    //clients.push(client);
+
+    console.log('Tcp Client connected'+'['+freerunning+']')
+    client.on('data',function(data){
+        
+        let ipAddr=client.remoteAddress.replace(/^.*:/,'');
+        //console.log('ipAddr='+ipAddr)
+		console.log('<<-- Data recevied : ' + data + ' '+ ipAddr);
+        //console.log('clients:'+clients.length)
+        responseMsg='OKay:0'
+		// let sender=this;
+		// clients.forEach(function(client){
+		// 	if(client==sender)
+		// 		client.write(responseMsg);
+		// 	//console.log('>>-- client.write by forEach'+' clients.length='+clients.length);
+		// 	return false;
+
+		// });
+
+        client.write(responseMsg)
+
+        let ss=""+data
+        let sp= ss.split(':')
+
+        io.sockets.emit('tcp-res',{ip:ipAddr,id:sp[2],cnt:freerunning})
+    })
+	client.on('end', function () {
+		///console.log("client end disconnected -- shown");
+	});
+
+    client.on('close',function(){
+        console.log("client close disconnected -- shown");
+    })
+    client.on('error',function(err){
+        console.log('client Error: ', JSON.stringify(err));
+
+    })
+
+})
+tcp.listen(1600,function() {
+    console.log('tcp server listening...'+JSON.stringify(tcp.address()))
+})
+
+
 
 
 app.use(express.static(__dirname +'/public'))
@@ -106,7 +158,11 @@ let position ={
 
 
 io.on("connection",socket=>{
-    console.log("socket io connection")
+    console.log("socket io connection:"+socket.id) //socket io connection:KpIT8alvv1S_teQ4AAAB
+    socket.on('disconnect',msg=>{
+        console.log('disconnected:'+socket.id+' msg:' +msg)
+    })
+
     socket.on("move",data=>{
         switch(data) {
             case "left":
