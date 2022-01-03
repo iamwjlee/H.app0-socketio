@@ -1,15 +1,18 @@
 <template>
 <div id="app">
   <div id="nav">
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Home </router-link> |
     <router-link to="/touch">Touch board setting</router-link> |
     <router-link to="/gsap">GSAP</router-link> | 
     <router-link to="/link">Link</router-link> |
+    <router-link to="/layout">Layout</router-link> |   
+    <router-link to="/Grid">Grid</router-link> |   
     <router-link to="/about">About</router-link> 
 
   </div>
   <router-view/>
 
+  <notifications />
   <!-- <router-view v-slot="{ Component }">
     <transition name="route" mode="out-in">
       <component :is="Component"> </component>

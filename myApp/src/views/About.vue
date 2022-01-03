@@ -55,12 +55,12 @@
         </ul>
     <h3>J.link</h3>
         <ul>
-            <li> Test for Link Service</li>
+            <li> 1st try</li>
             <li> http(1603) waiting...with socket.io </li>
             <li> tcp#1(1600)waiting...</li>
             <li> tcp#2(1601)waiting...</li>
             <li></li>
-            <li></li>
+            <li>2nd try</li>
             <li>http(1605)+tcp(1600) is running local by node</li>
             <li>web app(1604) is connected with node by socket.io(1605)  </li>
             <li>web app is running local http://localhost:1604/</li>
@@ -127,9 +127,32 @@
     <br>
 
 
+    <h3>layout test</h3>
 
-
-
+    <!-- <div class="container">
+        <div class="row">
+            <div class="col">
+            1 of 2
+            </div>
+            <div class="col">
+            2 of 2
+            </div>
+        </div>
+        <div class="row row-cols-2 my-row" >
+            <div class="col my-col1">
+                <img src="../assets/logo.png" alt="" width="100" >
+            </div>
+            <div class="col my-col2">
+            2 of 3
+            </div>
+            <div class="col my-col3">
+                <img src="../assets/akane.jpg" alt="" >
+            </div>
+            <div class="col" >
+                2of4
+            </div>
+        </div>
+    </div> -->
 
   </div>
 </template>
@@ -217,6 +240,41 @@ h2,h4 {
     90% {transform:  translateX(-4px) }
     100% {transform:  translateX(0px) }
 
+}
+
+.my-row {
+    display:flexbox
+}
+.my-col1 {
+    text-align: center;
+    /* background-color: darkorange; */
+    /* background: url('../assets/logo.png'); */
+} 
+.my-col2 {
+    background-color:darkorchid
+}
+.my-col3 {
+    /* width: 200;
+    height: 150;
+    object-fit: cover; */
+    
+    /* background-color:darkseagreen */
+    width: 70%;
+    height: 200px;
+    overflow: hidden;
+
+}
+.my-col3 img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+
+}
+.comment {
+    text-align: right; 
+    margin-bottom: 0px; 
+    margin-left: 50px; 
+    font-size:12px;
 }
 
 </style>

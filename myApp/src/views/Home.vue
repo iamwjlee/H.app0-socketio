@@ -5,7 +5,6 @@
     <!-- <button @click="boxTest">box</button>
     <div class="box orange"></div> -->
 
-
     <a href="#gsap">GSAP</a> <br>
 
     <div v-if="HomeTransitionTest">
@@ -106,9 +105,11 @@
 // import Talk from '../components/Talk.vue'
 
 import gsap from 'gsap'
+// import My from '../components/My.vue'
 export default {
   name: 'Home',
   components: {
+    // My,
     // Talk,
     //HelloWorld
   },

@@ -36,7 +36,7 @@
     </p>
 
     <div class="m-2">  
-        <input type="text" class="form-control m-1" v-model="id" placeholder="Name" >  
+        <input type="text" class="form-control m-1" v-model="id" placeholder="PassWord" >  
         <button class="btn btn-primary m-1" @click="checkName" > Approval </button> 
     </div> 
 
@@ -365,6 +365,9 @@ export default {
     height: 100px;
     margin: 4px;  
     padding: 10px 10px 10px 10px; 
+}
+.item:hover {
+    color:darkorange;
 }
 .itemHit {
     background: orchid;
