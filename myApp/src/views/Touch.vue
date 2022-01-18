@@ -41,6 +41,7 @@
       <li>설정=> 시스템->디스플레이-> 밝기변경 60%</li>
       <li>원도우10 최적화및 업데이트방지 셋팅이 필요</li>
       <ul>
+        <li>설정->Windows 업데이트누르면 <span style="color:red; font-size:12px">*일부설정은 조직에서 관리합니다</span> 확인해야  </li>
         <li>services.msc -> windows update :: 수동->사용안함으로 셋팅</li>
         <li>gpedit.msc  -> 관리템플릿->windows 구성요소 ->windows 업데이트->자동업데이트구성 -> 사용안함</li>
         <li>gpedit.msc  -> 관리템플릿->시스템->인터넷통신관리 ->인터넷통신설정->모든 windows 업데이트기능에 액세스안함 ->사용</li>

@@ -156,6 +156,11 @@ let position ={
     y: 200
 };
 
+let odt ={
+    odtId:'',
+    cost:'',
+    literLimit:''
+}
 
 io.on("connection",socket=>{
     console.log("socket io connection:"+socket.id) //socket io connection:KpIT8alvv1S_teQ4AAAB
@@ -185,6 +190,64 @@ io.on("connection",socket=>{
 
         }
     })
+    //
+    socket.on("odt",(cmd,arg)=>{
+        //odt=data
+        //io.emit("odt",odt)
+        console.log('odt test',cmd)
+        if(cmd=='read') {
+            let db = new sqlite3.Database('./db/chinook.db');
+            sql = `select * from odt`;
+            let rowsArray=[]
+            db.all(sql, [], (err, rows) => {
+                if (err) throw err;
+                rows.forEach((row) => {
+                    console.log(row);
+                    rowsArray.push(row)
+                });
+                db.close()
+                io.emit("odt",rowsArray);
+            });
+        }
+        else if(cmd=='write') {
+            
+            console.log('write mode',arg )
+
+            //let cost='1234'
+            //let literLimit='99'
+            let found=false;
+            let db = new sqlite3.Database('./db/chinook.db');
+
+            sql = `update odt set cost="${arg.cost}",literLimit="${arg.literLimit}" where odtId="${arg.odtId}" `;
+            db.run(sql)
+            db.close();
+
+
+            // sql=`select * from odt where odtId="${arg.odtId}" `;
+            // db.all(sql,[],(err,rows)=>{
+            //     if(err) throw err;
+            //     rows.forEach((row)=>{
+            //         console.log('forEach',row.odtId,arg.odtId);
+            //         if(row.odtId==arg.odtId) found=true;
+            //     });
+            // })
+            // console.log('async problem!! found',found);
+            // if(found==false) {
+            //     console.log('New odtId found & inserted');
+            //     sql = `insert into odt values( "${arg.odtId}","${arg.cost}","${arg.literLimit}") `;
+            //     db.run(sql)
+            //     db.close();
+            // }
+            // else {
+            //     sql = `update odt set cost="${arg.cost}",literLimit="${arg.literLimit}" where odtId="${arg.odtId}" `;
+            //     db.run(sql)
+            //     db.close();
+            // }
+        }
+
+
+    })
+    //
     socket.on("db",data=>{
         let db = new sqlite3.Database('./db/chinook.db');
 

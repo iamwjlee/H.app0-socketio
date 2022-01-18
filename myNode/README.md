@@ -17,4 +17,19 @@
  insert into setup2 values("192.168.0.101",1,datetime('now','localtime'));
  select * from adj where code=100;
  delete from adj where code=0 and pumpId=0;
+
+ 2020-01-14
+ create table odt( odtId text,cost text,literLimit text);
+ .schema odt
+ insert into odt values('3','1000','90');
+
+ select * from odt;
+
+ .header on
+ .mode column
+
+ update odt set cost='1001' where odtId='3';
+
+ delete from odt where cost='1000';
+
 ```

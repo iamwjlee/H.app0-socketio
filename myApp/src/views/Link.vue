@@ -290,7 +290,10 @@ export default {
             //console.log('x='+this.position.x+' y='+this.position.y)
 
         })
-
+        // this.socket.on('setup',data=>{
+        //     this.setup=data
+        //     console.log(this.setup)
+        // })
         this.socket.on("tcp-res",data=>{
             this.tcpResponse=data
 
