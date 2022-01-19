@@ -218,7 +218,7 @@ io.on("connection",socket=>{
             let found=false;
             let db = new sqlite3.Database('./db/chinook.db');
 
-            sql = `update odt set cost="${arg.cost}",literLimit="${arg.literLimit}" where odtId="${arg.odtId}" `;
+            sql = `update odt set cost="${arg.cost}",literLimit="${arg.literLimit}",dTotal="${arg.dTotal}"  where odtId="${arg.odtId}" `;
             db.run(sql)
             db.close();
 
@@ -247,6 +247,37 @@ io.on("connection",socket=>{
 
 
     })
+
+    socket.on("sales",(cmd,arg)=>{
+        console.log('sales test',cmd)
+        if(cmd=='read') {
+            let db = new sqlite3.Database('./db/chinook.db');
+            sql = `select * from sales`;
+            let rowsArray=[]
+            db.all(sql, [], (err, rows) => {
+                if (err) throw err;
+                rows.forEach((row) => {
+                    console.log(row);
+                    rowsArray.push(row)
+                });
+                db.close()
+                io.emit("sales",rowsArray);
+            });
+        }
+        else if(cmd=='write') {
+            
+            console.log('write mode',arg )
+            let db = new sqlite3.Database('./db/chinook.db');
+
+            sql = `insert into sales values("${arg.odtId}","${arg.date}","${arg.carNumber}","${arg.liter}",
+                                            "${arg.cost}","${arg.amount}","${arg.class}" ) `;
+            db.run(sql)
+            db.close();
+
+        }
+
+    })
+
     //
     socket.on("db",data=>{
         let db = new sqlite3.Database('./db/chinook.db');

@@ -85,13 +85,7 @@ export default {
             }
         },   
         okay() {
-            console.log('okay',this.current,this.argProps)
-            // if(this.argProps=='amount') this.result.type='amount'
-            // else if(this.argProps=='liter') this.result.type='liter'
-            // else if(this.argProps=='defaultCode') this.result.type='defaultCode'
-            // else if(this.argProps=='pumpId') this.result.type='pumpId'
-            // else if(this.argProps=='cost') this.result.type='cost'
-            // else if(this.argProps=='posCard') this.result.type=this.argProps
+            // console.log('okay',this.current,this.argProps)
             this.result.type=this.argProps
             this.result.value=this.current
             this.$emit('result',this.result)

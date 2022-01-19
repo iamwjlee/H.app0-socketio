@@ -21,7 +21,7 @@
  2020-01-14
  create table odt( odtId text,cost text,literLimit text);
  .schema odt
- insert into odt values('3','1000','90');
+ insert into odt values('3','1000','90',0);
 
  select * from odt;
 
@@ -31,5 +31,14 @@
  update odt set cost='1001' where odtId='3';
 
  delete from odt where cost='1000';
+
+ 2020-01-18
+ create table sales(odtId text,date text,carNumber text,liter text,cost text,amount text, class text);
+ drop table sales;  //table delete
+
+ drop table odt;
+ create table odt( odtId text,cost text,literLimit text,dTotal int);
+ insert into odt values('3','1000','90',0);
+
 
 ```

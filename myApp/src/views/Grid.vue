@@ -1,6 +1,7 @@
 <template>
 <div>
 
+
 <a @click="jpos5000" class="jpos5000 anim" href="#">jpos5000 manual</a>
 <a @click="fetch" class="jpos5000 anim" href="#">fetch</a>
 <br> <br>
@@ -35,20 +36,13 @@
   <i class="centerIcon fas fa-radiation fa-1x"></i>
   <i class="fas fa-cog fa-1x"></i>
   <i class="fas fa-arrow-left fa-1x"></i>
+  <i class="fas fa-calculator"></i>
 
 </div>
 <Hello v-if="showInput" :argProps="inputPara" @close="inputClose" @result="inputResult"/>
+<YesNo v-if="showYesNo" :argProps="yesnoPara" @close="yesnoClose" />
 
-<!-- <br> -->
-<!-- <NormalSetup @normalSetup="normalSetup"/> -->
-<!-- <br> -->
-
-<!-- dialog box -->
-<!-- <Input v-if="showInput" :argProps="inputPara" @close="inputClose" @result="inputResult" /> -->
-
-
-
-<!-- arya otp setup image -->
+<!-- 보안설정 메뉴 -->
 <div v-if="gridState==9">
   <div class="otp-container">
     <div class="setup-side">
@@ -66,7 +60,10 @@
     </div>
     <div class="otp-body">
       <div class="item">시간변경</div>
-      <div class="item">토탈변경</div>
+      <div class="item">
+        <div>토탈변경</div>
+        <div>{{dTotal}} </div>
+      </div>
       <div class="item">기차변경</div>
       <div class="item-empty"></div>
       <div class="item-empty"></div>
@@ -79,7 +76,7 @@
   </div>
 </div>
 
-<!-- arya dispenser setup image -->
+<!-- 충전기설정 메뉴 -->
 <div v-if="gridState==8">
   <div class="dispenser-container">
     <div class="setup-side">
@@ -100,24 +97,52 @@
         <div>프리스탑</div>
         <div>500</div>
       </div>
-      <div class="item">2</div>
-      <div class="item">3</div>
-      <div class="item">4</div>
-      <div class="item">5</div>
-      <div class="item">6</div>
-      <div class="item">7</div>
-      <div class="item">8</div>
+      <div class="item">
+        <div>리터표시</div>
+        <div>5</div>
+        
+      </div>
+      <div class="item">
+        <div>디스펜서</div>
+        <div>내장형</div>
+      </div>
+      <div class="item">
+        <div>포스모드</div>
+        <div>장위</div>
+      </div>
+      <div class="item">
+        <div>저속충전</div>
+        <div>4</div>
+        </div>
+      <div class="item">
+        <div>고속충전</div>
+        <div>1000</div>
+        </div>
+      <div class="item">
+        <div>대류온타임</div>
+        <div>8</div>
+        </div>
+      <div class="item">
+        <div>소류온타임</div>
+        <div>4</div>
+        </div>
       <div @click="inputSetting('최대충전량')" class="item">
         <div>최대충전량</div>        
         <div>{{literLimit}}</div>
       </div>
-      <div class="item">10</div>
-      <div class="item"></div>
+      <div class="item">
+        <div>홀센서사용</div>
+        <div>OFF</div>
+        </div>
+      <div class="item">
+        <div>유량계재부팅</div>
+        <div>확인</div>
+        </div>
     </div>
   </div>
 </div>
 
-<!-- arya pos setup image -->
+<!-- 포스설정 메뉴 -->
 <div v-if="gridState==6">
   <div class="pos-container">
     <div class="setup-side">
@@ -147,9 +172,9 @@
         <div>NICE</div>
 
       </div>
-      <div class="item">
+      <div @click="yesNoSetting('판매데이타 초기화')" class="item">
         <div>인덱스</div>
-        <div>확인</div>
+        <div>변경</div>
        
       </div>
       <div class="item">
@@ -167,7 +192,7 @@
 
 </div>
 
-<!-- arya print setup image -->
+<!-- 프린터설정 메뉴 -->
 <div v-if="gridState==7">
   <div class="print-container">
     <div class="setup-side">
@@ -188,21 +213,53 @@
         <div>소비자용</div>
         <div>ON</div>
       </div>
-      <div class="item">2</div>
-      <div class="item">3</div>
-      <div class="item">4</div>
-      <div class="item">5</div>
-      <div class="item">6</div>
-      <div class="item">7</div>
-      <div class="item">8</div>
-      <div class="item">9</div>
-      <div class="item">10</div>
+      <div class="item">
+        <div>가맹점용</div>
+        <div>ON</div>
+        
+      </div>
+      <div class="item">
+        <div>KBG발급</div>
+        <div>ON</div>
+        
+      </div>
+      <div class="item">
+        <div>인쇄농도</div>
+        <div>2</div>
+      </div>
+      <div class="item">
+        <div>문자강조</div>
+        <div>ON</div>
+      </div>
+      <div class="item">
+        <div>헤드분할</div>
+        <div>ON</div>
+      
+      </div>
+      <div class="item">
+        <div>커터기사용</div>
+        <div>ON</div>
+      </div>
+      <div class="item">
+        <div>백피드</div>
+        <div>ON</div>
+      </div>
+      <div class="item">
+        <div>설정값인쇄</div>
+        <div>확인</div>
+       
+      </div>
+      <div class="item">
+        <div>테스트인쇄</div>
+        <div>확인</div>
+        
+      </div>
     </div>
 
   </div>
 </div>
 
-<!-- arya normal setup menu image -->
+<!-- 일반설정 메뉴 -->
 <div v-if="gridState==5">
   <div class="setup-container">
     <div class="setup-side">
@@ -227,31 +284,183 @@
         <div>포스카드</div>
         <div>{{posCard}}</div>
       </div>
-      <div class="item">
+      <div @click="onOffSetup('PresetLimit')" class="item">
         <div>프리셋제한</div>
-        <div>ON</div>
+        <div v-if="PresetLimit">ON</div>
+        <div v-else>OFF</div>
       </div>
-      <div class="item">4</div>
+      <div @click="onOffSetup('CodeCostUse')" class="item">
+        <div>거래처단가</div>
+        <div v-if="CodeCostUse">ON</div>
+        <div v-else>OFF</div>
+       
+      </div>
       <div @click="inputSetting('호기')" class="item">
         <div>호기설정</div>
         <div>{{pumpId}}</div>
       </div>
-      <div class="item">6</div>
-      <div class="item">7</div>
-      <div class="item">8</div>
+      <div @click="onOffSetup('CorpUse')" class="item">
+        <div>법인승인</div>
+        <div v-if="CorpUse">ON</div>
+        <div v-else>OFF</div>
+      </div>
+      <div @click="onOffSetup('NozSWUse')" class="item">
+        <div>노즐스위치</div>
+        <div v-if="NozSWUse">ON</div>
+        <div v-else>OFF</div>
+      </div>
+      <div @click="onOffSetup('KeyNozswUse')" class="item">
+        <div>터치노즐</div>
+        <div v-if="KeyNozswUse">ON</div>
+        <div v-else>OFF</div>
+        
+      </div>
       <div @click="inputSetting('defaultCode')" class="item">
         <div>디폴트코드</div>
         <div>{{defaultCode}}</div>
       </div>
-      <div class="item">10</div>
-      <div class="item">11</div>
-      <div class="item">다음</div>
+      <div @click="onOffSetup('ReceiptMode')" class="item">
+        <div>SK영수증</div>
+        <div v-if="ReceiptMode">ON</div>
+        <div v-else>OFF</div>
+       
+      </div>
+      <div @click="onOffSetup('SKPosCost')" class="item">
+        <div>SK단가</div>
+        <div v-if="SKPosCost">ON</div>
+        <div v-else>OFF</div>
+      </div>
+      <div @click="clickBack(52)" class="item">다음</div>
     </div>
   </div>
 
 </div>
 
-<!-- arya main menu -->
+<!-- 일반설정 두번째 메뉴 -->
+<div v-if="gridState==52">
+  <div class="setup-container">
+    <div class="setup-side">
+      <div class="item">SK</div>
+      <div  @click="clickBack(5)" class="item"><b>일반설정</b> </div>
+      <div  @click="clickBack(7)" class="item">프린터설정</div>
+      <div  @click="clickBack(6)" class="item">포스설정</div>
+      <div  @click="clickBack(8)" class="item">충전기설정</div>
+      <div  @click="clickBack(9)" class="item">보안설정</div>
+      <div  @click="clickBack(2)" class="item">
+        <div><i class="fas fa-arrow-left fa-2x"></i></div>
+        <div>나가기</div>
+      </div>
+    </div>
+    <div class="setup-body">
+      <div class="item">
+        <div>uSD정보</div>
+        
+      </div>
+      <div class="item">
+        <div>총회전량</div>
+      </div>
+      <div class="item">
+        <div>디스플레이</div>
+      </div>
+      <div class="item">
+        <div>패스워드</div>
+      </div>
+      <div  class="item">
+        <div>버전확인</div>
+      </div>
+      <div class="item">
+        <div>버퍼보드리셋</div>
+      </div>
+      <div class="item">
+        <div>프린터리셋</div>
+      </div>
+      <div class="item">
+        <div>프로그램리셋</div>
+      </div>
+      <div @click="clickBack(5)" class="item">
+        <div>이전</div>
+        
+      </div>
+      <div  class="item">
+        <div>리더기무결성</div>
+       
+      </div>
+      <div  class="item">
+        <div>무결성재실행</div>
+      </div>
+      <div @click="clickBack(53)" class="item">다음</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 일반설정 세번째 메뉴 -->
+<div v-if="gridState==53">
+  <div class="setup-container">
+    <div class="setup-side">
+      <div class="item">SK</div>
+      <div  @click="clickBack(5)" class="item"><b>일반설정</b> </div>
+      <div  @click="clickBack(7)" class="item">프린터설정</div>
+      <div  @click="clickBack(6)" class="item">포스설정</div>
+      <div  @click="clickBack(8)" class="item">충전기설정</div>
+      <div  @click="clickBack(9)" class="item">보안설정</div>
+      <div  @click="clickBack(2)" class="item">
+        <div><i class="fas fa-arrow-left fa-2x"></i></div>
+        <div>나가기</div>
+      </div>
+    </div>
+    <div class="setup-body">
+      <div  class="item">
+        <div>머핀서비스</div>
+        <div>OFF</div>
+        
+      </div>
+      <div  class="item">
+        <div>머핀세차권</div>
+        <div>OFF</div>
+      </div>
+      <div class="item">
+        <div>머핀포인트</div>
+        <div>OFF</div>
+      </div>
+      <div  class="item">
+        <div>블루멤버스</div>
+        <div>OFF</div>
+       
+      </div>
+      <div  class="item">
+        <div>현장할인</div>
+        <div>OFF</div>
+      </div>
+      <div  class="item">
+        <div>픽업몰</div>
+        <div>OFF</div>
+      </div>
+      <div  class="item">
+        <div>유대입금</div>
+        <div>OFF</div>
+      </div>
+      <div  class="item">
+        <div>간편가입</div>
+        <div>OFF</div>
+        
+      </div>
+      <div @click="clickBack(52)" class="item">
+        <div>이전</div>
+      </div>
+      <div  class="item">
+        <div></div>
+        <div></div>
+       
+      </div>
+      <div class="item"> </div>
+      <div class="item"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 메인 메뉴 -->
 <div v-if="gridState==2">
   <div class="mainmenu-container">
     <div class="mainmenu-side">
@@ -297,19 +506,20 @@
 
 </div>
 
-<!-- arya first image -->
+<!-- 메인 화면 -->
 <div v-if="gridState==0">
   <div class="first-container">
     <div class="first-head">
       <div @click="myInfo">SK</div>
       <div class="first-head02">
-        <div>
+        <div class="item1">
           <i class="first-icon far fa-bell fa-1x"></i>
           <i class="first-icon fas fa-exclamation-triangle fa-1x"></i> 
           <i class="first-icon fas fa-exclamation-circle fa-1x"></i> 
           <i class="first-icon fas fa-radiation fa-1x"></i>
         </div>
-        <div>{{yyyMMdd}}:{{timeDisplay}}</div>
+        <!-- <div>{{yyyMMdd}}:{{timeDisplay}}</div> -->
+        <div class="item2">{{now}}</div>
       </div>
       <div>
         <i @click="clickMenu" class="fas fa-bars fa-2x"></i>
@@ -334,7 +544,7 @@
 
 </div>
 
-<!-- arya charge menu -->
+<!-- 충전화면 -->
 <div v-if="gridState==1">
   <div class="charge-container">
     <div class="charge-side">
@@ -355,7 +565,10 @@
       </div>
     </div>
     <div class="charge-body">
-      <div class="item">머핀</div>
+      <div class="item">
+        <div style="color:blueviolet" ><i class="fas fa-bone fa-2x"></i></div>
+        <div>머핀</div>
+        </div>
       <div @click="inputSetting('차량번호')" class="item">
         <div>고객관리</div>
         <!-- <div>{{carNumberDisplay}}</div> -->
@@ -369,18 +582,31 @@
       </div>
       <div @click="clickPreset('1만원')" class="item">1만원</div>
       <div @click="clickPreset('2만원')" class="item">2만원</div>
-      <div @click="inputSetting('금액')" class="item">금액설정</div>
-      <div @click="clickPreset('가득')" class="item">가득충전</div>
+      <div @click="inputSetting('금액')" class="item">
+        <div style="color:#ccc"><i class="fas fa-calculator fa-2x"></i></div>
+        <div>금액설정</div>
+        
+      </div>
+      <div @click="clickPreset('가득')" class="item">
+        <div style="color:#ccc"><i class="fab fa-cloudscale fa-2x"></i></div>
+        <div>가득충전</div>
+        </div>
       <div @click="clickPreset('10리터')" class="item">10리터</div>
       <div @click="clickPreset('20리터')" class="item">20리터</div>
-      <div @click="inputSetting('리터')" class="item">정량설정</div>
-      <div @click="clickBack(4)" class="item">결제</div>
+      <div @click="inputSetting('리터')" class="item">
+        <div style="color:#ccc"><i class="fas fa-calculator fa-2x"></i></div>
+        <div>정량설정</div>
+      </div>
+      <div @click="clickBack(4)" class="item">
+        <div><i class="fab fa-amazon-pay fa-2x"></i></div>
+        <div>결제</div>
+        </div>
 
     </div>
   </div>
 </div>
 
-<!-- arya charging image -->
+<!-- 충전중 화면 -->
 <div v-if="gridState==3">
   <div class="charging-container">
     <div class="charging-side">
@@ -403,86 +629,85 @@
     <div class="charging-body">
       <div class="item1">
         <div class="i1">충전금액</div>
-        <div class="i2">{{amountDisplay}}원</div>
+        <!-- <div class="i2">{{amountDisplay}}원</div> -->
+        <div class="i2">
+          <div class="i2-1">{{amountDisplay}}</div>
+          <div class="i2-2">원</div>
+          
+          
+        </div>
         <div class="i1">충전량</div>
-        <div class="i2">{{literDisplay}}리터</div>
-        <div class="i3">단가 {{costDisplay}}원</div>
-        <div class="i3">목표충전 {{preSetting}}</div>
+        <!-- <div class="i2">{{literDisplay}}리터</div> -->
+        <div class="i2">
+          <div class="i2-1">{{literDisplay}}</div>
+          <div class="i2-2">리터</div>
+
+        </div>
+        <div class="i3">
+          <div class="i3-1">단가</div>
+          <div class="i3-2">{{costDisplay}}원</div>
+        </div>
+        <div class="i3">
+          <div class="i3-1">목표충전</div>
+          <div class="i3-2">{{preSetting}}</div>
+        </div>
       </div>
       <div @click="inputSetting('차량번호')" class="item">
         <div>고객관리</div>
         <div>{{carNumberDisplay}}</div>
       </div>
-      <div @click="inputSetting('금액')" class="item">금액설정</div>
-      <div @click="inputSetting('리터')" class="item">정량설정</div>
-      <div @click="clickChargeStop" class="item">충전중지</div>
+      <div @click="inputSetting('금액')" class="item">
+        <div style="color:#ccc"><i class="fas fa-calculator fa-1x"></i></div>
+        <div>금액설정</div>
+        </div>
+      <div @click="inputSetting('리터')" class="item">
+        <div style="color:#ccc"><i class="fas fa-calculator fa-1x"></i></div>
+        <div>정량설정</div>
+        
+        </div>
+      <div @click="clickChargeStop" class="item">
+        <div style="color:#ccc"><i class="far fa-stop-circle"></i></div>
+        <div>충전중지</div>
+        </div>
 
     </div>
   </div>
 </div>
 
 
-
+<!-- 결제중 화면 -->
 <div v-if="gridState==41">
   <div class="payment-container">
     <PayLeft @exit="backPayment" />
-    <div @click="clickBack(0,'결제완료')" class="payment-body">
-      신용카드 결제
+    <div @click="clickBack(42,'결제완료')" class="payment-body">
+      <div class="item1">
+        <div>호기:{{pumpId}}</div>
+        <div>거래일시:{{getDateTime()}}</div>
+        <div>차량번호:{{carNumber}}</div>
+        <div>수량:{{liter}}</div>
+        <div>단가:{{cost}}</div>
+        <div>금액:{{amount}}</div>
+      </div>
+      <div class="item2" >{{paymentKind}}</div>
+
     </div>
   </div>
 </div>
-
+<!-- 영수증 화면 -->
 <div v-if="gridState==42">
   <div class="payment-container">
     <PayLeft @exit="backPayment" />
-    <div  @click="clickBack(0,'결제완료')" class="payment-body">
-      신용적립 결제
+    <div @click="clickBack(0)" class="payment-body">
+      <div class="item2"><i class="fas fa-receipt fa-4x"></i></div>
+      <div class="item2">영수증</div>
     </div>
   </div>
-</div>
-<div v-if="gridState==43">
-  <div class="payment-container">
-    <PayLeft @exit="backPayment" />
-    <div  @click="clickBack(0,'결제완료')" class="payment-body">
-      현금영수증 결제
-    </div>
-  </div>
-</div>
-<div v-if="gridState==44">
-  <div class="payment-container">
-    <PayLeft @exit="backPayment" />
-    <div  @click="clickBack(0,'결제완료')" class="payment-body">
-      포인트 결제
-    </div>
-  </div>
+
+
 </div>
 
-<div v-if="gridState==45">
-  <div class="payment-container">
-    <PayLeft @exit="backPayment" />
-    <div  @click="clickBack(0,'결제완료')" class="payment-body">
-      현금영수증+적립 결제
-    </div>
-  </div>
-</div>
-<div v-if="gridState==46">
-  <div class="payment-container">
-    <PayLeft @exit="backPayment" />
-    <div  @click="clickBack(0,'결제완료')" class="payment-body">
-      적립 결제
-    </div>
-  </div>
-</div>
-<div v-if="gridState==47">
-  <div class="payment-container">
-    <PayLeft @exit="backPayment" />
-    <div  @click="clickBack(0,'결제완료')" class="payment-body">
-      복합 결제
-    </div>
-  </div>
-</div>
 
-<!-- arya payment image -->
+<!-- 결제 메뉴 -->
 <div v-if="gridState==4">
   <div class="pay-container">
   <div class="pay-side">
@@ -501,14 +726,23 @@
   </div>
   <div class="pay-body">
     <div class="t01">
-      <div>!</div>
+      <div><b>!</b></div>
       <div class="a4">{{pumpId}}호기</div>
       <div class="a1">충전이 완료되었습니다</div>
       <div class="a1">결제방식을 선택해주세요</div>
       <div class="a3">충전금액</div>
-      <div class="a2">{{amountDisplay}}원</div>
+      <div class="a2">
+        <div class="a2-1">{{amountDisplay}}</div>
+        <div class="a2-2">원</div>
+        <!-- {{amountDisplay}}원 -->
+      </div>
       <div class="a3">충전량</div>
-      <div class="a2">{{literDisplay}}리터</div>
+      <div class="a2">
+        <div class="a2-1">{{literDisplay}}</div>
+        <div class="a2-2">리터</div>
+
+        <!-- {{literDisplay}}리터 -->
+      </div>
     </div>
     <div @click="payment('card')" class="p01">카드결제</div>
     <div @click="payment('cardNsave')" class="p02">
@@ -537,6 +771,7 @@
 let timer1=0
 import Hello from '../components/Hello.vue'
 import PayLeft from '../components/PayLeft.vue'
+import YesNo from '../components/YesNo.vue'
 
 import gsap from 'gsap'
 import io from "socket.io-client"
@@ -545,6 +780,7 @@ export default {
   components: {
     Hello,
     PayLeft,
+    YesNo,
   },
   data() {
     return {
@@ -572,15 +808,29 @@ export default {
       //
       socket: {},
       position: {x:0,y:0},
-      odt: {odtId:'',cost:'',literLimit:''},
+      odt: {odtId:'',cost:'',literLimit:'',dTotal:'' },
       //
       payPara: '',
-      dTotal: 0
+      dTotal: 0,
+      now: '',
+      preStop: 100,
+      pStop: 0,
+      sales : {odtId:'',date: '',carNumber:'',liter:'',cost:'',amount:'',class:''},
+      yesnoPara: '적용',
+      showYesNo: false,
+      CorpUse: false,
+      NozSWUse: true,
+      KeyNozswUse: true,
+      PresetLimit: false, //10만원이상 이하
+      CodeCostUse: false,
+      SKPosCost: false,
+      ReceiptMode: false, //sk영수증옵션
+      paymentKind: ''
+
     }
   },
   created() {
     this.socket =io("http://106.245.87.140:1605"); //How to deal with Cross Origin Resource Sharing
-
   },
 
   mounted() {
@@ -597,38 +847,74 @@ export default {
       console.log('fetch db')
 
       for(let i=0;i<data.length;i++) {
-        console.log('odtId=', data[i].odtId ,data[i].cost)
+        console.log('odtId=', data[i].odtId ,data[i].cost,data[i].dTotal)
       }
       this.literLimit=data[0].literLimit
       this.pumpId=data[0].odtId
       this.cost=data[0].cost
+
+      this.dTotal=data[0].dTotal
     })
+    //동적으로변경되는 타임스탬프
+    this.updateNow()
+    setInterval(this.updateNow.bind(this),1000)
   },
   methods: {
+    onOffSetup(arg) {
+      if(arg=='CorpUse') this.CorpUse=!this.CorpUse
+      else if(arg=='NozSWUse') this.NozSWUse=!this.NozSWUse
+      else if(arg=='KeyNozswUse') this.KeyNozswUse=!this.KeyNozswUse
+      else if(arg=='PresetLimit') this.PresetLimit=!this.PresetLimit
+      else if(arg=='CodeCostUse') this.CodeCostUse=!this.CodeCostUse
+      else if(arg=='ReceiptMode') this.ReceiptMode=!this.ReceiptMode
+      else if(arg=='SKPosCost') this.SKPosCost=!this.SKPosCost
+      
+    },
+    getDateTime() {
+        let today=new Date()
+        let year=today.getFullYear()
+        let month=(''+today.getMonth()+1).slice(-2)
+        let day=(''+today.getDate()).slice(-2)
+        let dateString=year+'-'+month+'-'+day
+        let hours=today.getHours() < 10 ? '0'+today.getHours():today.getHours();
+        let minutes=today.getMinutes() < 10 ? '0'+ today.getMinutes() :today.getMinutes() ;
+        let seconds=today.getSeconds() < 10 ?'0'+today.getSeconds() : today.getSeconds() ;
+        let hmsString=hours+':'+minutes+':'+seconds
+        return dateString+' '+hmsString
+
+    },
+
+    updateNow() {
+      this.now= this.getDateTime()
+    },
     payment(arg) {
       if(arg=='card'){
         this.gridState=41
+        this.paymentKind='신용카드결제'
       }
       else if(arg=='cardNsave') {
-        this.gridState=42
-
+        this.gridState=41
+        this.paymentKind='적립+신용'
       }
       else if(arg=='cash'){
-        this.gridState=43
+        this.gridState=41
+        this.paymentKind='현금영수증'
       }
       else if(arg=='point'){
-        this.gridState=44
+        this.gridState=41
+        this.paymentKind='포인트'
       }
       else if(arg=='cashNsave'){
-        this.gridState=45
+        this.gridState=41
+        this.paymentKind='현금영수증+적립'
       }
       else if(arg=='save') {
-        this.gridState=46
-
+        this.gridState=41
+        this.paymentKind='적립'
       }
       else if(arg=='complex') {
-        this.gridState=47
-
+        this.gridState=41
+        this.paymentKind='복합결제'
       }
 
     },
@@ -656,7 +942,7 @@ export default {
     },
     inputResult(arg) {
       this.showInput=!this.showInput
-      console.log('inputResult',arg)
+      // console.log('inputResult',arg)
 
       if(arg.type=='금액') {
         this.pAmount=this.pLiter=0
@@ -674,7 +960,6 @@ export default {
       else if(arg.type=='차량번호') {
         this.carNumber=arg.value
         console.log('-->차량번호:',this.carNumber)
-        // this.prevCarNumber=this.carNumber
         if(this.isCharging==false) this.clickCharge(this.carNumber)
       }
 
@@ -682,17 +967,30 @@ export default {
     inputClose() {
       this.showInput=!this.showInput
     },
+    yesnoClose(arg) {
+      this.showYesNo=!this.showYesNo
+      if(arg==true) {
+        console.log('yesno true')
+
+      }
+      else if(arg==false) {
+        console.log('yesno false')
+      }
+    },
     backPayment() {
       console.log('backPayment')
       this.gridState=4
     },
     inputSetting(arg){
-      console.log('input')
+      console.log('inputDialog')
       this.showInput=!this.showInput
       this.inputPara=arg
 
     },
-
+    yesNoSetting(arg) {
+      this.showYesNo=!this.showYesNo
+      this.yesnoPara=arg
+    },
     clickPreset(arg) {
       this.pAmount=this.pLiter=0
       if(arg=='1만원') this.pAmount=10000
@@ -702,7 +1000,7 @@ export default {
       else if(arg=='가득') this.pAmount=this.pLiter=0;
     },
     clickPump() {
-      console.log('click')
+      // console.log('click')
       if(this.isPay==true) this.gridState=4
       else {
         if(this.isCharging==true) this.gridState=3
@@ -712,18 +1010,39 @@ export default {
     clickBack(arg,arg2='default') {
       if(arg2=="결제나가기") {
         this.isPay=false
+        this.pLiter=0
+        this.pAmount=0
         console.log('결제나가기[s,t]',this.gridState,this.dTotal)
 
       }
       else if(arg2=='결제완료'){
         this.isPay=false
-        console.log('결제완료[s,t]',this.gridState,this.dTotal)
+        this.pAmount=0
+        this.pLiter=0
+        console.log('결제완료')
+        console.log(` 
+        호기:"${this.pumpId}" 거래일자:"${this.getDateTime()}" 코드번호:"${this.carNumber}" 
+        수량:"${this.liter}" 단가:"${this.cost}" 금액:"${this.amount}" 거래구분:"${this.gridState}"   `)
 
+        this.sales.odtId=this.pumpId
+        this.sales.date=this.getDateTime()
+        this.sales.carNumber=this.carNumber
+        this.sales.liter=''+this.liter
+        this.sales.cost=this.cost
+        this.sales.amount=''+this.amount
+        this.sales.class=''+this.gridState
+        this.socket.emit('sales','write',this.sales)
+
+        setTimeout(()=>{
+          console.log('결제완료 타임아웃')
+          this.gridState=0
+        },1100)
       }
       else if(this.gridState==5) {
         this.odt.odtId=this.pumpId
         this.odt.cost=this.cost
         this.odt.literLimit=this.literLimit
+        this.odt.dTotal=this.dTotal
         console.log('메뉴나가기',this.odt.odtId,this.odt.cost,this.odt.literLimit)
         this.socket.emit('odt','write',this.odt)
       }
@@ -740,7 +1059,6 @@ export default {
 
       // let tmLiter='0'+this.liter*1000
       // tmLiter=tmLiter.padStart(7,'0')
-      //let tmTimeSring=tmTime
       this.dTotal+=this.liter
       console.log('충전완료[nu,am,li,co,to]',this.carNumber,this.amount,this.liter,this.cost,this.dTotal)
 
@@ -752,41 +1070,47 @@ export default {
         +'99'
         +(''+this.dTotal).padStart(9,'0')
         +(''+this.cost*100).padStart(7,'0')
-      console.log('tm:',tm)
+      console.log('TM:',tm)
+      console.log('total write',this.dTotal)
+      this.odt.odtId=this.pumpId
+      this.odt.cost=this.cost
+      this.odt.literLimit=this.literLimit
+      this.odt.dTotal=this.dTotal
+      this.socket.emit('odt','write',this.odt)
 
 
     },
     clickCharge(arg='') {
       this.gridState=3
       if(arg)
-        console.log('충전시작[nu]',this.carNumber)
+        console.log('충전시작[carNumber]',this.carNumber)
       else {
         this.carNumber='090000'
-        console.log('충전시작')
+        console.log('충전시작[pA,pL]',this.pAmount,this.pLiter)
       }
       if(this.isCharging==false) {
           this.isCharging=true
           if(this.pulseCount!=0) this.pulseCount=0
+          //
+          if(this.pLiter) this.pStop=this.pLiter-this.preStop
+          else if(this.pAmount) {
+            let liter=Math.round((this.pAmount*1000)/this.cost)
+            this.pStop=liter-this.preStop
+          }
+          else this.pStop=this.literLimit*1000
+          //
           timer1=setInterval(()=>{
-              let tmp
-              this.pulseCount+=22;
-              tmp=this.pulseCount/1000
-              // this.liter=tmp.toFixed(3)
-              // tmp=this.liter*this.cost
-              // tmp=Math.ceil(this.liter*this.cost)
+              if(this.pulseCount>this.pStop) this.pulseCount+=1;
+              else          this.pulseCount+=22;
               
-              // this.amount=Number(tmp).toLocaleString()
-
-              // this.amount=tmp
-
               this.liter=this.pulseCount
-              // this.amount=(this.pulseCount/1000).toFixed(3)*this.cost
-              this.amount=Math.round((this.pulseCount*this.cost)/1000)
-              if(this.pLiter && this.pulseCount>=this.pLiter) {
+              this.amount=Math.round((this.liter*this.cost)/1000)
+              if(this.pLiter && this.liter>=this.pLiter) {
                 this.clickChargeStop();
                 return
               }
-              else if(this.pAmount && tmp >= this.pAmount){
+              else if(this.pAmount && this.amount >= this.pAmount){
+                //this.amount=this.pAmount
                 this.clickChargeStop();
                 return
 
@@ -815,14 +1139,7 @@ export default {
       return Number(this.cost).toLocaleString()
     },
     amountDisplay() {
-      //return Number(this.amount)
-      let tmp=(this.pulseCount/1000).toFixed(3)
-      tmp=Math.ceil(tmp*this.cost)
-      return Number(tmp).toLocaleString()
-      
-      // let tmp=Math.ceil(this.liter*this.cost)
-      // return Number(tmp).toLocaleString()
-
+      return Number(this.amount).toLocaleString()
     },
     literDisplay() {
       return (this.pulseCount/1000).toFixed(3)
@@ -868,10 +1185,11 @@ export default {
     tmTime() {
         let today=new Date()
         let year=today.getFullYear()-2000
-        let month=('0'+(today.getMonth()+1)).slice(-2)
-        let day=('0'+today.getDate()).slice(-2)
-        let hours=('0'+today.getHours())
-        let minutes=('0'+ today.getMinutes())
+        let month=(''+(today.getMonth()+1)).slice(-2)
+        let day=(''+today.getDate()).slice(-2)
+
+        let hours=(''+today.getHours())
+        let minutes=(''+ today.getMinutes())
         let tmTimeString=year+month+day+hours+minutes
         return tmTimeString
     },
@@ -949,7 +1267,7 @@ export default {
 }
 .pos-body {
   width: 300px;
-  background-color: #ddd;
+  /* background-color: #ddd; */
   display: grid;
   grid-template-columns: repeat(4,1fr);
   grid-auto-rows: minmax(42px,auto);
@@ -1000,7 +1318,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: blanchedalmond;
+  /* background-color: blanchedalmond; */
 
 }
 .setup-side .item {
@@ -1010,7 +1328,7 @@ export default {
 }
 .setup-body {
   width: 300px;
-  background-color:#ddd;
+  /* background-color:#ddd; */
   display: grid;
   grid-template-columns: repeat(4,1fr);
   grid-auto-rows: minmax(42px,auto);
@@ -1045,7 +1363,7 @@ export default {
 }
 .mainmenu-body {
   width: 300px;
-  background-color: gainsboro;
+  /* background-color: gainsboro; */
   display: grid;
   grid-template-columns: repeat(4,1fr);
   grid-auto-rows: minmax(38px,auto);
@@ -1072,12 +1390,15 @@ export default {
 .mainmenu-body .item {
   border: 1px solid black;
   font-size: 12px;
+  background-color: lightgray;
 }
 .mainmenu-body .item1 {
   border: 1px solid black;
   grid-column: 1/2;
   grid-row: 1/3;
   font-size: 12px;
+  background-color: #ddd;
+
 
 }
 .mainmenu-body .item2 {
@@ -1085,6 +1406,7 @@ export default {
   grid-column: 1/2;
   grid-row: 3/5;
   font-size: 12px;
+  background-color: #ddd;
 
 }
 .mainmenu-body .item3 {
@@ -1092,6 +1414,7 @@ export default {
   grid-column: 4/5;
   grid-row: 4/6;
   font-size: 12px;
+  background-color: #ddd;
 
 }
 
@@ -1109,11 +1432,9 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   width: 40px;
-  /* border: 1px solid black; */
 }
 .charging-body {
   width: 300px;
-  /* border: 1px solid black; */
   display: grid;
   grid-template-columns: repeat(4,1fr);
   grid-auto-rows: minmax(42px,auto);
@@ -1122,7 +1443,6 @@ export default {
   
 }
 .charging-body .item1 {
-  /* border: 1px solid black; */
   grid-column: 1/4;
   grid-row: 1/5;
   text-align: center;
@@ -1138,17 +1458,38 @@ export default {
 .charging-body .item1 .i1 {
   font-size: 18px;
   font-weight: bold;
-  /* border: 1px solid black; */
   margin-top: 10px;
 }
 .charging-body .item1 .i2 {
   font-size: 34px;
   font-weight: bold;
 }
-.charging-body .item1 .i3 {
+.i2-1 {
+  width: 140px;
+  text-align: right;
+  margin-right: 4px;
+  display: inline-block;
+}
+.i2-2 {
+  width: 58px;
+  text-align: left;
+  display: inline-block;
+  font-size: 24px;
+}
+/* .charging-body .item1 .i3 {
   font-size: 16px;
   font-weight: bold;
-  /* border: 1px solid black; */
+} */
+.i3-1 {
+  width: 80px;
+  text-align: right;
+  margin-right: 4px;
+  display: inline-block;
+}
+.i3-2 {
+  width: 100px;
+  text-align: left;
+  display: inline-block;
 }
 
 
@@ -1167,29 +1508,24 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   width: 40px;
-  /* border: 1px solid black; */
   font-size: 16px;
 
 }
 .charge-side01 {
-  /* border: 1px solid black; */
   text-align: center;
 
 }
 .charge-side02 {
   font-size: 8px;
   text-align: center;
-  /* border: 1px solid black; */
 }
 .charge-side03{
   text-align: center;
-  /* border: 1px solid black; */
 }
 
 .charge-body {
   margin: 10px;
   width: 300px;
-  /* border: 1px solid black; */
   font-size: 16px;
   display: grid;
   grid-template-columns: repeat(4,1fr);
@@ -1197,7 +1533,6 @@ export default {
   gap: 5px;
 
   /* justify-content: center; */
-
   /* align-items: center; */
 
 }
@@ -1206,6 +1541,7 @@ export default {
   font-size: 12px;
   text-align: center;
   border: 1px solid black;
+  padding-top: 4px;
 }
 .charge-body .item2 {
   /* justify-content: center; */
@@ -1213,7 +1549,7 @@ export default {
   background-color: #ddd;
   grid-column: 3/5;
   text-align: center;
-  padding-top: 20px;
+  /* padding-top: 10px; */
 }
 
 /* first image*/
@@ -1227,11 +1563,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 5px;
   margin-left: 10px;
   margin-right: 10px;
   height: 60px;
-  /* border: 1px solid black; */
   background-color: #ddd;
 
 }
@@ -1245,7 +1580,17 @@ export default {
 }
 .first-head02 {
   text-align: center;
+  
 }
+.first-head02 .item1 {
+  font-size: 16px;
+  /* border: 1px solid black; */
+}
+.first-head02 .item2 {
+  padding-top: 8px;
+  font-size: 8px;
+}
+
 .first-body02 {
   font-size: 8px;
 }
@@ -1262,7 +1607,6 @@ export default {
   justify-content: center; /*x*/
   column-gap: 3px;
   row-gap: 3px;
-  /* border: 1px solid pink; */
 
 }
 .first-body04 .item{
@@ -1273,7 +1617,9 @@ export default {
 
 .first-icon {
   border: 1px solid black;
-  margin-top: 10px;
+  border-radius: 4px;
+  padding: 4px 4px;
+  margin-top: 1px;
   margin-right: 4px;
 }
 
@@ -1289,10 +1635,20 @@ export default {
 .payment-body {
   background-color: #ddd;
   width: 300px;
-  /* text-align: center; */
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+}
+.payment-body .item1 {
+  margin-top: 20px;
+  margin-left: 110px;
+  text-align: left;
+  font-size: 8px;
+}
+.payment-body .item2 {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 16px;
 }
 /* payment */
 .pay-container {
@@ -1309,12 +1665,10 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* border: 1px solid black; */
   width: 40px;
   /* font-size: 16px; */
 }
 .pay-side .pay-side02 {
-  /* border: 1px solid blue; */
   font-size: 8px;
   color: black;
   text-align: center;
@@ -1336,7 +1690,6 @@ export default {
 
 .pay-body {
 
-  /* border: 1px solid black; */
   width: 300px;
   font-size: 12px;
 
@@ -1365,6 +1718,20 @@ export default {
 }
 .t01 .a2 {
   font-size: 28px;
+}
+.a2-1 {
+  width: 106px;
+  margin-right: 4px;
+  text-align: right;
+  display: inline-block;
+}
+.a2-2 {
+  width: 32px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+  
+  display: inline-block;
 }
 .t01 .a3 {
   margin-top: 6px;
