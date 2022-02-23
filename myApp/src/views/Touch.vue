@@ -1,5 +1,5 @@
 <template>
-  <div class="touch">
+  <div v-if="viewEnable" class="touch">
 
     <!-- <button @click="toggleModal" class="button-c">Open</button>
     <transition name="fade2">
@@ -10,6 +10,14 @@
 
         </div>
     </transition> -->
+    <!-- <div v-if="viewEnable">
+    </div>
+    <div v-else class="my-login">
+      <div @click="hello" class="aa">Hello </div>
+      <input class="bb" type="text" v-model="inputText">
+    </div>
+
+    <br> -->
 
 
 
@@ -111,8 +119,15 @@ export default {
   data() {
     return {
       // isOpen:false,
+      viewEnable: false,
 
     }
+  },
+  mounted() {
+    console.log('vuex:',this.$store.state.count)
+    if(this.$store.state.count==1) this.viewEnable=true;
+    else this.viewEnable=false
+
   },
   methods: {
     // toggleModal() {

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="viewEnable">
         <i class="fa-solid fa-arrow-rotate-left"></i>
         <i class="fas fa-times"></i>
         <i class="fas fa-arrow-right"></i>
@@ -367,6 +367,7 @@ export default {
     },
     data() {
         return {
+            viewEnable: false,
             about: false,
             gridLayout: false,
             pulseCount: 0,
@@ -391,6 +392,10 @@ export default {
         }
     },
     mounted() {
+        console.log('vuex:',this.$store.state.count)
+        if(this.$store.state.count==1) this.viewEnable=true;
+        else this.viewEnable=false
+
         // gsap.from(".aboutLayout", {
         //     opacity:0, duration:1 , y:-50, stagger:0.6
         // })

@@ -1,10 +1,11 @@
 
-const express=require('express')
-const fs=require('fs').promises
-const app=express()
-const server=require('http').createServer(app)
+const express=require('express');
+// const fs=require('fs').promises;  //it causes TypeError: fs.existsSync is not a function
+const fs=require('fs');
+const app=express();
+const server=require('http').createServer(app);
 const sqlite3=require('sqlite3').verbose();
-let io=require('socket.io')(server,{cors:{origin:"*"}})
+let io=require('socket.io')(server,{cors:{origin:"*"}});
 
 
 //org 1605
@@ -164,6 +165,29 @@ let odt ={
 
 io.on("connection",socket=>{
     console.log("socket io connection:"+socket.id) //socket io connection:KpIT8alvv1S_teQ4AAAB
+
+	try {
+		if( fs.existsSync('wj.json')){
+            console.log('wj.json exist');
+            fs.readFile('wj.json','utf-8',(err,jsonString)=>{
+                if(err) return
+                try {
+                    let data=JSON.parse(jsonString)
+                    //console.log(data)
+                }
+                catch(err) {
+                    console.log('err',err)
+                }
+            })
+		}
+
+	}
+	catch(err) {
+		console.error(err);
+	}
+
+
+
     socket.on('disconnect',msg=>{
         console.log('disconnected:'+socket.id+' msg:' +msg)
     })
@@ -399,5 +423,32 @@ io.on("connection",socket=>{
 
 
 
+    })
+    socket.on("myBell",data=>{
+        console.log('myBell:',__dirname)
+        if(data=='on') {
+            console.log('on:'+data)
+            
+            // const path=require('path')
+            // const filePath=path.join(__dirname,'/db')
+            // console.log('filePath=',filePath)
+            // fs.readdir(filePath,function(err,filelist){ 
+            //     console.log(filelist); 
+            // });
+            fs.readdir(__dirname+'/db',function(err,filelist){
+                console.log(filelist)
+            })
+
+
+        }
+        else if(data=='off') {
+            console.log('off:'+data)
+            let file='/db/test.db'
+            fs.open(__dirname+file,'w+',function(err,fd){
+                if(err) throw err
+                console.log('file open complete')
+            })
+
+        }
     })
 })

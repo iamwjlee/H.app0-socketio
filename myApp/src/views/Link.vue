@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="viewEnable">
     <h2>Link</h2>
     <div class="m-2">
     <button class="btn btn-primary m-1" @click="move('left')">Move Left</button> 
@@ -156,6 +156,7 @@ export default {
     },
     data() {
         return {
+            viewEnable: false,
             socket: {},
             position : {x:0,y:0},
             tcpList: [],
@@ -285,6 +286,10 @@ export default {
     },
 
     mounted() {
+        console.log('vuex:',this.$store.state.count)
+        if(this.$store.state.count==1) this.viewEnable=true;
+        else this.viewEnable=false
+
         this.socket.on("position",data=>{
             this.position=data
             //console.log('x='+this.position.x+' y='+this.position.y)

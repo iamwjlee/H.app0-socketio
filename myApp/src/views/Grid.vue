@@ -1,6 +1,8 @@
 <template>
 <div>
+<!-- <Hello v-if="showInput" :argProps="inputPara" @close="inputClose" @result="inputResult"/> -->
 
+<!-- <Wtable :columns="columns" :rows="users" /> -->
 
 <a @click="jpos5000" class="jpos5000 anim" href="#">jpos5000 manual</a>
 <a @click="fetch" class="jpos5000 anim" href="#">fetch</a>
@@ -22,7 +24,14 @@
   <p class="comment">orange.small bento orange.small plate, bento orange:first-child</p>
 
     <p class="comment"> JavaScript arrow function </p>
-
+  <p class="comment"> props 부모컴포넌트에서 자식컴포넌트로 데이터를 전달할때 사용하는 단방향.</p>
+  <p class="comment"> 부모가 v-bind나 :키워드를 사용하여 데이터를 전달하고 이벤트를 받을수 있다.</p>
+  <p class="comment"> 동적props v-bind사용시 부모의 데이터에 props를 동적으로 바인딩할 수 있습니다.</p>
+  <p class="comment"> 데이터가 상위에서 업데이트될때마다 하위데이터로 전달된다!</p>
+  <p class="comment"> Vuex는 상태관리 라이브러리 별도의저장소에서 데이터를 관리하며 비용이 많이든다  Redux(React) </p>
+  <p class="comment"> Mutation은 state를 변경하은 유일한 방법이고 이벤트와 유사하다.</p>
+  
+  
   <i class="fa-solid fa-arrow-rotate-left"></i>
   <i class="fas fa-times"></i>
   <i class="fas fa-arrow-right"></i>
@@ -36,9 +45,60 @@
   <i class="centerIcon fas fa-radiation fa-1x"></i>
   <i class="fas fa-cog fa-1x"></i>
   <i class="fas fa-arrow-left fa-1x"></i>
-  <i class="fas fa-calculator"></i>
+  <i class="fas fa-arrow-down"></i>
+  <i class="fas fa-arrow-up"></i>
+  <i @click="myTest" class="fas fa-calculator"></i>
 
 </div>
+
+<div v-if="showSales">
+
+  <Wtable :columns="Acolumns" 
+          :rows="salesList" 
+          :options="{ 
+            a: true,
+            pageSize: 6,
+            sortBy: {field:'odtId',type: 'asc'}
+          }"
+          @event1="wtableAction" />
+
+</div>
+
+
+<!-- <div v-if="showSales">
+  <div style="overflow-x: auto;">
+  <table class="customers">
+    <tr>
+      <th @click="test('1')">id</th>
+      <th @click="test('2')">date <i class="fas fa-arrow-left fa-1x"></i> </th>
+      <th> carNumber </th>
+      <th>liter</th>
+      <th>cost</th>
+      <th>amount</th>
+
+    </tr>
+    <tr v-for="(list,index) in visibleSalesList" :key="index">
+      <td> {{list.odtId}}       </td>
+      <td> {{list.date}} </td>
+      <td>{{list.carNumber}} </td>
+      <td> {{list.liter}} </td>
+      <td>{{list.cost}} </td>
+      <td> {{list.amount}} </td>
+
+    </tr>
+  </table>
+  <div class="mylist">
+    <p>total pages = {{currentPage+1}} of {{getTotalPages()}}</p>
+    <button type="button" class="btn01" >show</button>
+    <button type="button" class="btn01" @click="next"> ++ </button>
+    <button type="button" class="btn01" @click="prev"> -- </button>
+
+  </div>
+  </div>
+
+</div> -->
+
+
 <Hello v-if="showInput" :argProps="inputPara" @close="inputClose" @result="inputResult"/>
 <YesNo v-if="showYesNo" :argProps="yesnoPara" @close="yesnoClose" />
 
@@ -513,7 +573,7 @@
       <div @click="myInfo">SK</div>
       <div class="first-head02">
         <div class="item1">
-          <i class="first-icon far fa-bell fa-1x"></i>
+          <i @click="myBell" class="first-icon far fa-bell fa-1x"></i>
           <i class="first-icon fas fa-exclamation-triangle fa-1x"></i> 
           <i class="first-icon fas fa-exclamation-circle fa-1x"></i> 
           <i class="first-icon fas fa-radiation fa-1x"></i>
@@ -776,11 +836,14 @@ import YesNo from '../components/YesNo.vue'
 import gsap from 'gsap'
 import io from "socket.io-client"
 
+import Wtable from '../components/Wtable.vue'
+
 export default {
   components: {
     Hello,
     PayLeft,
     YesNo,
+    Wtable,
   },
   data() {
     return {
@@ -825,16 +888,88 @@ export default {
       CodeCostUse: false,
       SKPosCost: false,
       ReceiptMode: false, //sk영수증옵션
-      paymentKind: ''
+      paymentKind: '',
+      //
+      salesList: [],
+      visibleSalesList: [],//pagination //배열을 일부분을 잘라내어 새로운배열을 리턴한다.
+      currentPage:0,
+      pageSize: 10,
+      sortDir: true,
+      currentSort: 'odtId',
+      showSales: false,
+      sortTest: true,
+      //
+      Acolumns: [
+        { 
+          label: 'Id',
+          field: 'odtId',
+          sortable: true,
+        },
+        { 
+          label: 'Date',
+          field: 'date',
+          sortable: false
+        },
+        { 
+          label: 'CarNumber',
+          field: 'carNumber',
+          sortable: false
+        },
+        { 
+          label: 'Liter',
+          field: 'liter',
+          sortable: false
+        },
+        { 
+          label: 'Cost',
+          field: 'cost',
+          sortable: false,
+        },
+        { 
+          label: 'Amount',
+          field: 'amount',
+          sortable: false
 
+        },
+
+        { 
+          label: 'Class',
+          field: 'class',
+          sortable: false
+        },
+
+
+      ],
+      // columns: [
+      //   { 
+      //     label: 'Name',
+      //     field: 'name'
+      //   },
+      //   {
+      //     label: 'Age',
+      //     field: 'age'
+      //   }
+      // ],
+      // users:[
+      //   {name: 'John1',age: '50'},
+      //   {name: 'John2',age: '51'},
+      //   {name: 'John3',age: '52'},
+      // ],
+
+      //
+      year:0,
+      month:0,
+      weekName: ['일','월','화','수','목','금','토']
     }
   },
   created() {
     this.socket =io("http://106.245.87.140:1605"); //How to deal with Cross Origin Resource Sharing
+    this.init()
   },
 
   mounted() {
-    console.log('mounted')
+
+    console.log('mounted',this.$store.state.count)
     this.socket.emit('odt','read')
     gsap.from(".anim", {
         opacity:0, duration:1 , y:-50, stagger:0.6
@@ -855,11 +990,141 @@ export default {
 
       this.dTotal=data[0].dTotal
     })
+
     //동적으로변경되는 타임스탬프
     this.updateNow()
     setInterval(this.updateNow.bind(this),1000)
+
+    this.socket.on('sales',data=>{
+      // for(let i=0;i<data.length;i++) {
+      //   console.log('sales',data[i].odtId,data[i].date)
+      // }
+      this.salesList=data
+    })
+
+    const myList=['a','b','c','d','e','f','g','h']
+    let pageSize=3
+    let totalPages=Math.ceil(myList.length/pageSize)
+    console.log('totalPages=',totalPages)
+
+    let currentPage=3
+
+    let index=currentPage*pageSize
+    if(index>totalPages) console.log('out of size!!')
+    const visibleList=myList.slice(index,index+pageSize)
+    for(let i=0;i<visibleList.length;i++)
+      console.log(i+':'+visibleList[i])
+
+    //객체 정렬
+    const arr= [
+      {name: 'ff', price: 100},
+      {name: 'aa', price: 400},
+      {name: 'bb', price: 300},
+      {name: 'cc', price: 100},
+    ]
+    // arr.sort(function(a,b){
+    //   return a.price-b.price;
+    // })
+    arr.sort(function(a,b){
+      if(a.name < b.name) return 1
+      if(a.name > b.name) return -1
+      if(a.name === b.name) return 0
+    })
+    
+    console.log('sort',arr)
+
   },
+
   methods: {
+    myBell() {
+      console.log('myBell')
+      this.socket.emit('myBell','off')
+
+    },
+    test(s) {
+      let modifier=1
+      if(this.sortDir==true) modifier=-1;
+      //this.currentSort='odtId'
+      this.salesList.sort(function(a,b){
+        if(s=='1') {
+          if(a.odtId < b.odtId) return 1*modifier
+          if(a.odtId > b.odtId) return -1*modifier
+          if(a.odtId === b.odtId) return 0*modifier
+        }
+        else if(s=='2') {
+          if(a.date < b.date) return 1*modifier
+          if(a.date > b.date) return -1*modifier
+          if(a.date === b.date) return 0*modifier
+        }
+        //return a.odtId-b.odtId //숫자로 소팅
+
+      })
+      this.sortDir=!this.sortDir
+      //console.log('sort',this.salesList)
+      this.showPage()
+
+
+    },
+    next() {
+      console.log('next')
+      this.currentPage++
+      this.showPage()
+    },
+    prev() {
+      this.currentPage--
+      this.showPage()
+    },
+    getTotalPages() {
+      return Math.ceil(this.salesList.length/this.pageSize)
+    },
+    showPage() {
+      let index=this.currentPage*this.pageSize
+      this.visibleSalesList=this.salesList.slice(index,index+this.pageSize)
+
+    },
+    init(param) {
+      if(param) {
+        this.year=param[0]
+        this.month=param[1]
+      }
+      else {
+        const date= new Date()
+        this.year=date.getFullYear()
+        this.month=date.getMonth()+1
+        console.log('year',this.year,this.month)
+        let r=this.getFirstDayLastDate(2022,1)
+        console.log('요일,마지막일,전달마지막일',r)
+        
+      }
+    },
+    getFirstDayLastDate(year,month){
+      const firstDay=new Date(year,month-1,1).getDay() //6 요일
+      const lastDate=new Date(year,month,0).getDate()  //31
+
+      let lastMonth=month-1
+      if(month===1) {
+        lastMonth=12
+        year-=1
+      }
+      const prevLastDate=new Date(year,lastMonth,0).getDate()
+      console.log('firstDay',this.weekName[firstDay],lastDate,prevLastDate)
+      return [firstDay,lastDate,prevLastDate] //요일,마지막일자,전달의 마지막일자
+    },
+    myTest() {
+      console.log('myTest')
+      // for(let i=0;i<this.salesList.length;i++) {
+      //   console.log('myTest',this.salesList[i].odtId, this.salesList[i].date)
+      // }
+      this.totalPages=Math.ceil(this.salesList/this.pageSize)
+      console.log('totalPages:',this.totalPages)
+      this.showPage()
+      for(let i=0;i<this.visibleSalesList.length;i++) {
+        console.log('myTest',this.visibleSalesList[i].odtId, this.visibleSalesList[i].date)
+      }
+
+      this.showSales=!this.showSales
+      //console.log(this.salesList)
+    },
     onOffSetup(arg) {
       if(arg=='CorpUse') this.CorpUse=!this.CorpUse
       else if(arg=='NozSWUse') this.NozSWUse=!this.NozSWUse
@@ -873,13 +1138,14 @@ export default {
     getDateTime() {
         let today=new Date()
         let year=today.getFullYear()
-        let month=(''+today.getMonth()+1).slice(-2)
+        let month=('0'+(today.getMonth()+1)).slice(-2)
         let day=(''+today.getDate()).slice(-2)
         let dateString=year+'-'+month+'-'+day
         let hours=today.getHours() < 10 ? '0'+today.getHours():today.getHours();
         let minutes=today.getMinutes() < 10 ? '0'+ today.getMinutes() :today.getMinutes() ;
         let seconds=today.getSeconds() < 10 ?'0'+today.getSeconds() : today.getSeconds() ;
         let hmsString=hours+':'+minutes+':'+seconds
+
         return dateString+' '+hmsString
 
     },
@@ -936,9 +1202,17 @@ export default {
     fetch() {
       this.about=!this.about
       //this.socket.emit('odt','read')
+      this.socket.emit('sales','read')
     },
     normalSetup(arg) {
       console.log('normalSetup',arg.cost)
+    },
+    wtableAction(arg) {
+      console.log('arg.type=',arg.type)
+      console.log('arg.value=',arg.value)
+      this.showSales=!this.showSales
+
+
     },
     inputResult(arg) {
       this.showInput=!this.showInput
@@ -1130,6 +1404,22 @@ export default {
     }
   },
   computed: {
+    // cctest() {
+
+    // },
+
+    myTest001() {
+
+      // return this.salesList.sort((a,b)=>{
+      //   //  let modifier=1
+
+      //   // if(a.odtId < b.odtId) return 1*modifier
+      //   // if(a.odtId > b.odtId) return -1*modifier
+      //   if(a.odtId === b.odtId) return 0
+      //   else return 1
+      // })
+      return 0
+    },
     chargingState() {
       if(this.isPay===true) return '결제대기'
       else return this.isCharging==true ? '충전중':'충전대기'
@@ -1185,7 +1475,7 @@ export default {
     tmTime() {
         let today=new Date()
         let year=today.getFullYear()-2000
-        let month=(''+(today.getMonth()+1)).slice(-2)
+        let month=('0'+(today.getMonth()+1)).slice(-2)
         let day=(''+today.getDate()).slice(-2)
 
         let hours=(''+today.getHours())
@@ -1211,6 +1501,14 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+.mylist {
+  display: inline-block;
+  }
+.btn01 {
+  width: 80px;
+  height: 30px;
+  margin-right: 4px;
 }
 /* otp menu */
 .otp-container {
@@ -1829,4 +2127,27 @@ export default {
 
 
 
+table,td,th {
+  padding: 4px;
+  /* border: 1px solid #ddd */
+    border: 1px solid #ddd
+
+}
+td,th {
+  /* border-bottom: 1px solid #ddd; */
+}
+.customers {
+  width: 100%;
+  border-collapse: collapse;
+  /* border: 1px solid black; */
+}
+.customers th {
+  text-align: center;
+}
+tr:nth-child(even){
+  background-color: #f2f2f2;
+}
+tr:hover{
+  background-color: #ddd;
+}
 </style>

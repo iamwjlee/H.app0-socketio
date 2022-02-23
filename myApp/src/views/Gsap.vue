@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div v-if="viewEnable">
+
         <h3>gsap test</h3>
 
 
@@ -68,6 +69,7 @@ import gsap from 'gsap'
 export default {
     data() {
         return {
+            viewEnable: false,
             cards: [
                 {id:1234},
                 {id:3434},
@@ -90,7 +92,12 @@ export default {
             // stagger:0.1 /*다음번카드의 지연시간 */
             stagger: {from:'edges',each:0.1}
         })
-        console.log('mounted')
+        console.log('vuex:',this.$store.state.count)
+        if(this.$store.state.count==1) this.viewEnable=true;
+        else this.viewEnable=false
+
+
+
             gsap.from(".anim1", {
                 opacity:0, duration:1 , y:-50, stagger:0.6
             })

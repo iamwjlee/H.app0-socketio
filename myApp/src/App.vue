@@ -24,7 +24,7 @@
 
 </template>
 
-<style scoped>
+<style>
 
 
 
@@ -65,6 +65,28 @@
 }
 .route-leave-active {
   transition: all 0.3s ease-in;
+}
+
+.my-login {
+  text-align: center;
+
+}
+.my-login .aa {
+
+  font-size: 24px;
+  /* font-weight: bold; */
+  margin: 10px;
+
+  display: inline-block;
+  border: solid 1px #ddd;
+}
+
+.my-login .bb {
+  margin-top: 5px;
+  width: 100px;
+  height: 36px;  
+  font-size: 20px;
+  border: solid 1px #ddd;
 }
 
 </style>
