@@ -9,7 +9,8 @@ import { createStore} from 'vuex'
 const store = createStore({
     state() {
         return {
-            count: 0
+            count: 0,
+            message: 'Hello', //test
         }
     },
     mutations: {
@@ -18,8 +19,27 @@ const store = createStore({
         },
         enable(state) {
             state.count=1
+        },
+        changeMessage(state,msg){
+            state.message=msg
+        }
+    },
+    actions: {
+        increment({commit}) {
+            commit('increment')
+        },
+        callMutation({state,commit},{newMsg}){
+            console.log('callMutataion',state.message)
+            //commit('changeMessage',{state,newMsg})
+            commit('changeMessage',newMsg)
+        }
+    },
+    getters: {
+        getMsg(state){
+            return `${state.message} =>length:${state.message.length} `
         }
     }
+
 })
 // import "@/fontAwesomeIcon.js"; // fontAwesomeIcon.js ºÒ·¯¿È
 

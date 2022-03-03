@@ -3,10 +3,50 @@
 <!-- <Hello v-if="showInput" :argProps="inputPara" @close="inputClose" @result="inputResult"/> -->
 
 <!-- <Wtable :columns="columns" :rows="users" /> -->
+<span><b>STORE_ACTIONS_TEST:</b> </span>
+{{getMessage}} from store
+<button @click="onChangeMsg">click</button>
 
+<br>
+Web Storage Test <input type="text" placeholder="Enter string to store" v-model="newTodoItem">
+<br>
+<span> <b>LOCAL_STORAGE_TEST:</b> </span> 
+<button @click="addTodoItem">add local</button>
+<li v-for="item in todoItems" :key="item">
+  <input type="checkbox" :id="item.item">
+  <label :for="item.item ">
+    <p>{{item}}</p>
+  </label>
+
+</li>
+<span> <b>SESSION_STORAGE_TEST:</b> </span> 
+
+<button @click="addSession">add session</button>
+
+<div class="top-header">
 <a @click="jpos5000" class="jpos5000 anim" href="#">jpos5000 manual</a>
 <a @click="fetch" class="jpos5000 anim" href="#">fetch</a>
+<a @click="odtInfo" class="jpos5000 anim" href="#">odt</a>
+
+</div>
 <br> <br>
+
+
+
+<!-- flex-test -->
+<!-- <div class="c0">
+  <div class="i0">
+    <div class="i00">aaa1</div>
+    <div class="i00">aaa2</div>
+  </div>
+  <div class="i0">bbbbb</div>
+  <div class="i0">cccccc</div>
+  <div class="i0">ddd</div>
+  <div class="i0">eeeeeeeeee</div>
+
+</div> -->
+
+
 <div v-if="about">
   <p class="comment"> selector it was a fluke </p>
   <p class="comment"> universal * </p>
@@ -30,11 +70,15 @@
   <p class="comment"> 데이터가 상위에서 업데이트될때마다 하위데이터로 전달된다!</p>
   <p class="comment"> Vuex는 상태관리 라이브러리 별도의저장소에서 데이터를 관리하며 비용이 많이든다  Redux(React) </p>
   <p class="comment"> Mutation은 state를 변경하은 유일한 방법이고 이벤트와 유사하다.</p>
-  
-  
+  <p class="comment"> 클래스 바인딩 객체 또는 배열   item.status[7]==='2'? 'charging-item':'charging-item2's :class="" </p>
+  <p class="comment"> 동적으로변경되는 타임스탬프 bind사용</p>
+  <p class="comment"> socketio basic emit and acknowledgements for dline  https://socket.io/docs/v3/emitting-events/ </p>
+  <p class="comment"> Vuex에 저장하고도 새로고침에 로그인정보가 안날라가게 하는 방법 쿠키나 로컬 스토리지,세션스토리지 에 남기는 방법</p>
+  <p class="comment"> Web Storage API 직관적으로 key/value데이터를 안전하게 저장</p>
+  <p class="comment"> 로컬스토리지는 브라우저를 종료해도 데이터가 계속 유지 세션스토리지는 없어짐</p>
   <i class="fa-solid fa-arrow-rotate-left"></i>
   <i class="fas fa-times"></i>
-  <i class="fas fa-arrow-right"></i>
+  <i @click="readDb" class="fas fa-arrow-right"></i>
   <i class="fas fa-bars"></i>
   <i class="fab fa-cc-visa"></i>
   <i class="fas fa-cat"></i>
@@ -46,10 +90,60 @@
   <i class="fas fa-cog fa-1x"></i>
   <i class="fas fa-arrow-left fa-1x"></i>
   <i class="fas fa-arrow-down"></i>
-  <i class="fas fa-arrow-up"></i>
+  <i @click="literSum(0)" class="fas fa-arrow-up"></i>
   <i @click="myTest" class="fas fa-calculator"></i>
 
 </div>
+
+<!-- <div v-if="odtInfoDisplayEnable" class="client-list">
+  <p style="background-color:#cdd">Connected {{tcpResponse}}</p>
+
+  <li v-for="(item,index) in tcpList" 
+        :key=index 
+        class="client-list-item" 
+        :class="[index===tcpResponseHit? 'selected-item':'']"
+
+        >
+        
+    <div>
+      {{item.ip}}
+      {{item.id}}
+      <div class="client-status">
+          {{item.status[7]}}
+      </div>
+    </div>
+
+  </li>
+  </div>
+
+</div> -->
+<div style="background-color:#cdd; margin:auto; width:90%">{{today}} {{freeRunning}}</div>
+
+<div v-if="odtInfoDisplayEnable" class="c0">
+
+  <div v-for="(item,index) in tcpList" 
+        :key=index 
+        class="i0" 
+        :class="[index===tcpResponseHit? 'selected-item':'']"
+
+        >
+      <div v-if="item.ip==='192.168.0.1'" class="i00">JW</div>    
+      <div v-else  class="i00">{{item.ip}}</div>    
+
+      <div class="i00">{{item.id}}</div>        
+      <div v-if="item.status[7]==='2'" class="i01"> 충전중</div>        
+      <div v-else-if="item.status[7]==='4'" class="i02"> 결제대기중</div>        
+      <div v-else class="i00">{{item.status[7]}}</div>        
+
+     
+      
+      
+
+  </div>
+
+</div>
+
+
 
 <div v-if="showSales">
 
@@ -57,14 +151,27 @@
           :rows="salesList" 
           :options="{ 
             a: true,
-            pageSize: 6,
+            pageSize: 5,
             sortBy: {field:'odtId',type: 'asc'}
           }"
           @event1="wtableAction" />
 
 </div>
 
+<div v-if="myTest02Enable">
+  MY TEST02
+  <Wtable :columns="Tcolumns" 
+          :rows="Tlows" 
+          :options="{ 
+            a: true,
+            pageSize: 2,
+            sortBy: {field:'odtId',type: 'asc'}
+          }"
+          @event1="wtableAction" />
 
+
+
+</div>
 <!-- <div v-if="showSales">
   <div style="overflow-x: auto;">
   <table class="customers">
@@ -102,6 +209,7 @@
 <Hello v-if="showInput" :argProps="inputPara" @close="inputClose" @result="inputResult"/>
 <YesNo v-if="showYesNo" :argProps="yesnoPara" @close="yesnoClose" />
 
+<br>
 <!-- 보안설정 메뉴 -->
 <div v-if="gridState==9">
   <div class="otp-container">
@@ -837,6 +945,7 @@ import gsap from 'gsap'
 import io from "socket.io-client"
 
 import Wtable from '../components/Wtable.vue'
+import getDate from '../getDate.js'
 
 export default {
   components: {
@@ -847,6 +956,7 @@ export default {
   },
   data() {
     return {
+      tcpList: [],
       about: false,
       gridState: -1,
       gridLayout: false,
@@ -898,7 +1008,30 @@ export default {
       currentSort: 'odtId',
       showSales: false,
       sortTest: true,
+      myTest02Enable: false,
       //
+      Tlows: [],
+      Tcolumns: [
+        {
+          label: '호기',
+          field: 'name'
+        },
+        {
+          label: '합계',
+          field: 'total'
+        },
+        {
+          label: '02호기',
+          field: 'value2'
+
+        },
+        {
+          label: '03호기',
+          field: 'value3'
+
+        }
+      ],
+
       Acolumns: [
         { 
           label: 'Id',
@@ -940,6 +1073,8 @@ export default {
 
 
       ],
+
+      odtInfoDisplayEnable: false,
       // columns: [
       //   { 
       //     label: 'Name',
@@ -959,12 +1094,33 @@ export default {
       //
       year:0,
       month:0,
-      weekName: ['일','월','화','수','목','금','토']
+      weekName: ['일','월','화','수','목','금','토'],
+      //socket
+      tcpResponse: "",
+      tcpResponseHit: "",
+      tcpResponseWatch: "",
+      freeRunning: 0,
+      today:'',
+      //
+      newTodoItem: '',
+      todoItems: [],
+      timestamp: '',
     }
   },
   created() {
     this.socket =io("http://106.245.87.140:1605"); //How to deal with Cross Origin Resource Sharing
     this.init()
+
+    this.timestamp=`${getDate().month}/${getDate().date} ${getDate().week} `
+    let time=getDate().time
+    console.log('timestamp:',this.timestamp,time)
+    for(let i=0; i<localStorage.length;i++) {
+      let d=localStorage.getItem(localStorage.key(i))
+      if(localStorage.key(i)!='loglevel:webpack-dev-server') 
+        this.todoItems.push(localStorage.getItem(localStorage.key(i)))
+      console.log('created:',d)
+    }
+
   },
 
   mounted() {
@@ -978,6 +1134,31 @@ export default {
       this.position=data
       console.log('isConnected:'+this.position.x)
     })
+
+    this.socket.on("tcp-res",data=>{
+        this.tcpResponse=data
+        this.freeRunning++
+        let hitIndex
+        let hit=this.tcpList.some(function (el,index) {
+              if(el.ip===data.ip && el.id===data.id) {
+                  hitIndex=index
+                  //console.log('index '+index)
+                  return true
+              }
+
+        })
+        if(hit==false) {
+            this.tcpList.push(data)
+        }
+        else {
+            this.tcpList.splice(hitIndex,1,data)  
+            this.tcpResponseWatch=data
+            this.tcpResponseHit=hitIndex
+        }
+    })
+
+
+
     this.socket.on('odt',data=>{
       console.log('fetch db')
 
@@ -1000,6 +1181,7 @@ export default {
       //   console.log('sales',data[i].odtId,data[i].date)
       // }
       this.salesList=data
+      console.log('got sales data from server')
     })
 
     const myList=['a','b','c','d','e','f','g','h']
@@ -1034,11 +1216,82 @@ export default {
     console.log('sort',arr)
 
   },
+  watch: {
+    //tcpList: {
+      //handler(val) {
+        //들어올때마다 계속 콜된다
+        //console.log('watch tcpList',val)
 
+      //},
+      //deep: true
+    //},
+    salesList: function(newData) {
+      console.log('watch msg:', newData)
+      this.salesList=newData
+
+      // let aa=[]
+      // aa=newData
+      // this.salesList=aa
+      //this.totalPages=Math.ceil(this.salesList/this.pageSize)
+      //let index=this.currentPage*this.pageSize
+      //this.visibleSalesList=this.salesList.slice(index,index+this.pageSize)
+
+      this.literSum(1)
+
+    }
+  },
   methods: {
+    odtInfo() {
+      let d=this.getDateTime()
+      this.today=d.slice(0,11)
+      console.log('odt',d,this.today)
+      
+      this.odtInfoDisplayEnable=!this.odtInfoDisplayEnable
+      if(this.odtInfoDisplayEnable) {
+        for(let i=0;i<this.tcpList.length;i++) {
+          console.log('tcpList.id:',this.tcpList[i].ip,this.tcpList[i].id,this.tcpList[i].status)
+        //console.log('tcpList',this.tcpList.length)
+          if(this.tcpList[i].status[7]==='2') {
+          console.log('test', this.tcpList[i].status[7])
+          }
+
+        }
+      }
+    },
+    readDb() {
+      console.log('read db')
+      this.socket.emit('sales','read')
+    },
     myBell() {
-      console.log('myBell')
-      this.socket.emit('myBell','off')
+      let obj= {
+        p1: 'make-table',
+        p2: ''
+
+      }
+      obj.p1='dl'
+      obj.p2=this.getDateTime().slice(0,11).replace(/-/g,'')
+      console.log(this.getDateTime())
+      console.log(this.getDateTime().slice(0,11))
+      console.log('myBell event obj.p2=',obj.p2)
+      // setTimeout(()=>{
+      //   console.log('delete from sales for deadLine')
+      // })
+
+      //this.socket.emit('myBell',obj)
+      this.socket.emit('dline',obj,(res)=>{
+        console.log('response',res.status)
+
+        if(res.status=='ok') {
+          obj.p1='dl-clear'
+          this.socket.emit('dline',obj,(res)=>{
+            console.log('response',res.status)
+          })
+        }
+
+      })
+
+      //Understanding JavaScript's Execution Model
+      //https://www.sitepoint.com/delay-sleep-pause-wait/
 
     },
     test(s) {
@@ -1125,6 +1378,61 @@ export default {
       this.showSales=!this.showSales
       //console.log(this.salesList)
     },
+    literSum(arg) {
+      console.log('literSum',this.salesList.length)
+      if(arg==0)
+        this.myTest02Enable=!this.myTest02Enable
+
+      let liter2=0
+      let liter3=0
+      let won2=0
+      let won3=0
+      for(let i=0;i<this.salesList.length;i++) {
+        //console.log('salesList',this.salesList[i].odtId)
+        if(this.salesList[i].odtId==='2') {
+          let number=1*this.salesList[i].liter
+          liter2+=number
+
+          let won=1*this.salesList[i].amount
+          won2+=won
+          //console.log('hit2',liter2)
+        }
+        else if(this.salesList[i].odtId==='3') {
+          let number3=0
+          //console.log('hit3:',sum3)
+          number3=(this.salesList[i].liter)*1
+          liter3+=number3
+          let won=1*this.salesList[i].amount
+          won3+=won
+
+          //console.log('hit3',number3,liter3)
+        }
+
+      }
+      let test_list= [
+        {name: '일판매량(L)', total: '0',value2: '10', value3: '20' },
+        {name: '일판매금액(W)', total:'' ,value2: '', value3: '' },
+      ]
+
+      test_list[0].value2=(liter2/1000).toFixed(3)
+
+      test_list[0].value3=(liter3/1000).toFixed(3)
+
+
+      test_list[1].value2=Number(won2).toLocaleString()
+      test_list[1].value3=Number(won3).toLocaleString()
+
+
+      let t=liter2+liter3
+      test_list[0].total=(t/1000).toFixed(3)
+
+
+      t=won2+won3
+      test_list[1].total=Number(t).toLocaleString()   
+
+      this.Tlows=test_list
+
+    },
     onOffSetup(arg) {
       if(arg=='CorpUse') this.CorpUse=!this.CorpUse
       else if(arg=='NozSWUse') this.NozSWUse=!this.NozSWUse
@@ -1139,7 +1447,7 @@ export default {
         let today=new Date()
         let year=today.getFullYear()
         let month=('0'+(today.getMonth()+1)).slice(-2)
-        let day=(''+today.getDate()).slice(-2)
+        let day=('0'+today.getDate()).slice(-2)
         let dateString=year+'-'+month+'-'+day
         let hours=today.getHours() < 10 ? '0'+today.getHours():today.getHours();
         let minutes=today.getMinutes() < 10 ? '0'+ today.getMinutes() :today.getMinutes() ;
@@ -1198,6 +1506,9 @@ export default {
       if(this.gridLayout==true) this.gridState=0
       else this.gridState=99
       this.socket.emit("move","left")
+
+      this.$store.commit('changeMessage','wjlee')
+
     },
     fetch() {
       this.about=!this.about
@@ -1267,7 +1578,7 @@ export default {
     },
     clickPreset(arg) {
       this.pAmount=this.pLiter=0
-      if(arg=='1만원') this.pAmount=10000
+      if(arg=='1만원') this.pAmount=2000
       else if(arg=='2만원') this.pAmount=20000
       else if(arg=='10리터') this.pLiter=10000
       else if(arg=='20리터') this.pLiter=20000
@@ -1401,13 +1712,49 @@ export default {
         this.isCharging=false
       }
 
+    },
+    onChangeMsg() {
+      console.log('onChangeMsg')
+      this.$store.dispatch('callMutation',{newMsg: 'World !!'})
+    },
+    addTodoItem() {
+      if(this.newTodoItem !='') {
+        let value = {
+          item: this.newTodoItem,
+          date: `${new Date().getMonth()+1}/${new Date().getDate()} `,
+          completed:false
+        }
+        localStorage.setItem(this.newTodoItem,JSON.stringify(value))
+        this.clearInput()
+      }
+      //localStorage.setItem(this.newTodoItem,this.newTodoItem)
+    },
+    clearInput() {
+      this.newTodoItem=''
+    },
+    addSession() {
+      if(this.newTodoItem !='') {
+        let value = {
+          item: this.newTodoItem,
+          date: `${new Date().getMonth()+1}/${new Date().getDate()} `,
+          completed:false
+        }
+        sessionStorage.setItem(this.newTodoItem,JSON.stringify(value))
+        this.clearInput()
+      }
+
     }
+
   },
   computed: {
     // cctest() {
 
     // },
+    getMessage() {
+      //return this.$store.state.message
+      return this.$store.getters.getMsg
 
+    },
     myTest001() {
 
       // return this.salesList.sort((a,b)=>{
@@ -2108,7 +2455,9 @@ export default {
 }
 
 .jpos5000 {
-    margin-left: 4%;
+    /* margin-left: 4%; */
+    margin-right: 3%;
+    margin-top: 3%;
     /* display: grid; */
     place-content: center;
 
@@ -2150,4 +2499,98 @@ tr:nth-child(even){
 tr:hover{
   background-color: #ddd;
 }
+
+.selected-item {
+   color: white; 
+  /* background-color: whitesmoke; */
+  border: 3px solid whitesmoke;
+}
+
+
+.charging-item {
+  background: blueviolet;
+  color: white;
+}
+.charging-item2 {
+  background: burlywood;
+  color: black;
+}
+
+.client-list {
+    margin: auto;
+    width: 80%;
+    border: 2px;
+    /* padding:2px; */
+
+    /* padding: 0px 0px 0px 0px; */
+    background-color: #777;
+    text-align: center;
+
+}
+.client-status {
+  /* background-color: aqua; */
+  font-weight: bold;
+  color: chocolate;
+
+}
+.client-list-item {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+    width: 80px;
+    height: 80px;
+    margin: 4px;  
+    padding: 10px 10px 10px 10px; 
+}
+.top-header {
+  margin: auto;
+  width: 90%;
+}
+
+.c0 {
+  margin: auto;
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: #b100f2;
+  /* text-align: center; */
+}
+.i0 {
+  /* display: flex; */
+  /* border: 1px solid #000; */
+  background-color: cadetblue;
+  width: 64px;
+  height: 64px;
+  margin: 5px;
+  font-size: 10px;
+  /* text-align: center; */
+}
+.i0 .i00 {
+  /* background-color: cadetblue; */
+  /* display: flex; */
+  border: 1px solid #000;
+  /* font-size: 10px; */
+  margin: 2px;
+  text-align: center;
+}
+.i0 .i01 {
+  background-color: blue;
+  /* display: flex; */
+  border: 1px solid #000;
+  /* font-size: 10px; */
+  margin: 2px;
+  text-align: center;
+}
+.i0 .i02 {
+  background-color: rgb(205, 245, 138);
+  /* display: flex; */
+  border: 1px solid #000;
+  /* font-size: 10px; */
+  margin: 2px;
+  text-align: center;
+}
+
 </style>

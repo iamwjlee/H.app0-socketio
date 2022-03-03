@@ -1,5 +1,6 @@
 <template>
-  <div v-if="viewEnable" class="touch">
+  <!-- <div v-if="viewEnable" class="touch"> -->
+  <div class="touch">
 
     <!-- <button @click="toggleModal" class="button-c">Open</button>
     <transition name="fade2">

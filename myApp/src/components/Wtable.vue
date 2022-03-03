@@ -1,5 +1,5 @@
 <template>
-    <div>Wtable component test
+    <div class="top">Wtable component test
         <table class="customers">
             <tr >
                 <th v-for="(list,index) in columns" :key="index" >
@@ -16,12 +16,12 @@
                 <td v-for="(col,j) in columns" :key="j"> {{list[col.field] }}</td>
             </tr>
         </table>
-        
+        <div v-if="getTotalPages()>1">
         <p>Total Pages = {{currentPage+1}} of {{getTotalPages()}}</p>
         <button type="button" class="btn01" @click="show">show</button>
         <button type="button" class="btn01" @click="next"> ++ </button>
         <button type="button" class="btn01" @click="prev"> -- </button>
-
+        </div>
     </div> 
     
 
@@ -44,6 +44,7 @@ export default {
         //sortTest: Boolean,
         options: Object,
     },
+    
     created() {
         //props의 경우 복사하여 그값을 마음대로 활용 할수 
         this.copyData=this.rows.slice()
@@ -68,6 +69,17 @@ export default {
             currentPage: 0,
             pageSize: 10,
             sortDir: true,
+        }
+    },
+    watch: {
+        rows: function(v1) {
+            console.log('watch rows:',v1)
+            // this.copyData=v1.slice()
+            this.copyData=v1
+            let index=this.currentPage*this.pageSize
+            this.pageSize=this.options.pageSize
+            this.visibleSalesList=this.copyData.slice(index,this.pageSize)
+
         }
     },
     methods: {
@@ -132,29 +144,47 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: 10px;
+}
+.top {
+    margin: auto;
+    width: 90%;
 }
 
 table,td,th {
-  padding: 4px;
+  padding: 0 2px;
   border: 1px solid #ddd;
 }
 .customers {
-  width: 100%;
+  /* width: 100%;  */
   border-collapse: collapse;
+  font-size: 10px;
   /* border: 1px solid black; */
 }
 .customers th {
-  text-align: center;
+  text-align: right;
+  font-size: 0.8rem;
+}
+.customers td {
+  text-align: right;  
+  font-size: 0.8rem;
+}
+td:nth-child(1) {
+    text-align: left;
+}
+th:nth-child(1) {
+    text-align: left;
 }
 tr:nth-child(even){
   background-color: #f2f2f2;
+  
 }
 tr:hover{
   background-color: #ddd;
 }
 .btn01 {
-  width: 80px;
-  height: 30px;
+  width: 60px;
+  height: 20px;
   margin-right: 4px;
 }
 

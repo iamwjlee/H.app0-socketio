@@ -7,7 +7,8 @@
     <router-link to="/link">Link</router-link> |
     <router-link to="/layout">Layout</router-link> |   
     <router-link to="/Grid">Grid</router-link> |   
-    <router-link to="/about">About</router-link> 
+    <router-link to="/about">About</router-link> |
+    <router-link to="/Login">Login</router-link> 
 
   </div>
   <router-view/>

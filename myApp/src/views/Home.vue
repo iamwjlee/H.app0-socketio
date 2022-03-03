@@ -2,19 +2,17 @@
   <div class="home">
 
 
-    <!-- <button @click="boxTest">box</button>
-    <div class="box orange"></div> -->
-    <div v-if="viewEnable">
+    <!-- <div v-if="viewEnable">
     </div>
     <div v-else class="my-login">
       <div @click="hello" class="aa">Hello </div>
       <input class="bb" type="text" v-model="inputText" placeholder="passwd">
-    </div>
+    </div> -->
 
     <br>
 
-    <div v-if="viewEnable">
-
+    <!-- <div v-if="viewEnable"> -->
+    <div>
     <a href="#gsap">GSAP</a> <br>
 
     <div v-if="HomeTransitionTest">
@@ -157,8 +155,8 @@ export default {
   },
   mounted() {
     console.log('mounted:',this.$store.state.count)
-    if(this.$store.state.count==1) this.viewEnable=true;
-    else this.viewEnable=false
+    // if(this.$store.state.count==1) this.viewEnable=true;
+    // else this.viewEnable=false
 
     gsap.from(".my-login", {
         opacity:0, duration:1 , y:-50, stagger:0.6
@@ -177,6 +175,14 @@ export default {
           console.log('same')
           this.$store.commit('enable')
           this.$router.push("/")
+          let value= {
+            user: this.inputText,
+            date:`${new Date().getMonth()+1}/${new Date().getDate()} `,
+            auth: true
+          }
+          sessionStorage.setItem(this.inputText,JSON.stringify(value))
+          this.viewEnable=!this.viewEnable
+
           break;
         }
 

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="viewEnable">
+    <div>
 
         <h3>gsap test</h3>
 
