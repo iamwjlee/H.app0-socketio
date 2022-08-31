@@ -56,15 +56,19 @@ import Notifications from '@kyvg/vue3-notification'
 // createApp(App).use(router).mount('#app')
 
 import axios from 'axios'  
+import VueCookies from 'vue-cookies'
+
+//axios.defaults.withCredentials=true
 
 const app=createApp(App)
 app.config.globalProperties.my="11" //test, it's not global that i think
 app.config.globalProperties.$axios=axios; //versiion2.xx prototype -> 
+app.config.globalProperties.$VueCookies=VueCookies; //versiion2.xx prototype -> 
 
 app.use(Notifications)
 app.use(router)
 app.use(store) //Install the store instance as a plugin
-
+//app.use(VueCookies)
 app.mount('#app')
 
 //global variable

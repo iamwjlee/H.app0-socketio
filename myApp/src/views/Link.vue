@@ -290,6 +290,19 @@ export default {
         if(this.$store.state.count==1) this.viewEnable=true;
         else this.viewEnable=false
 
+    let d=JSON.parse(sessionStorage.getItem('wj'))
+    if(d.auth==true) {
+      this.viewEnable=true
+      console.log('mounted:',d,this.viewEnable)
+    }
+    else {
+      this.viewEnable=false
+      console.log('mounted::',d,this.viewEnable)
+
+    }
+
+
+
         this.socket.on("position",data=>{
             this.position=data
             //console.log('x='+this.position.x+' y='+this.position.y)

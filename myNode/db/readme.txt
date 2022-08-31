@@ -11,8 +11,8 @@ sqlite> .header on
 sqlite> select * from sales;
 
 
-sqlite> create table  users (name text, age int);
-sqlite> insert into users values('w',3);
+sqlite> create table  users (id text, passwd text);
+sqlite> insert into users values('wj','/mdf56rugwtv7Qm2TgNPhNy9rrQp2czNTruQ4Vr43XE=');
 sqlite> insert into users values('a',4);
 sqlite> .mode column
 sqlite> .header on

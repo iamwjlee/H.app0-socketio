@@ -8,7 +8,10 @@
     <router-link to="/layout">Layout</router-link> |   
     <router-link to="/Grid">Grid</router-link> |   
     <router-link to="/about">About</router-link> |
+    <router-link to="/aud">Aud</router-link> |
+
     <router-link to="/Login">Login</router-link> 
+
 
   </div>
   <router-view/>
@@ -25,8 +28,45 @@
 
 </template>
 
-<style>
+<script>
+export default {
+  data() {
+    return {
+      logEnable: true
+    }
+  },
+  methods: {
 
+  },
+  created() {
+    //this.$VueCookies.isKey('connect.sid')
+    //let me=this.$VueCookies.keys().join('\n')
+    //this.$cookie.get('test')
+    console.log('----------->App.vue created!')
+    // 라우팅 되도 변화지 않는다. 리플레시 해야 바뀐다
+    // let d=JSON.parse(sessionStorage.getItem('wj'))
+    // if(d) {
+    //   this.logEnable=false
+    //   console.log('created:',d,this.logEnable)
+    // }
+    // else {
+    //   this.logEnable=true
+    //   console.log('created::',d,this.logEnable)
+
+    // }
+
+  }
+}
+</script>
+
+
+<style >
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box; 
+}
 
 
 

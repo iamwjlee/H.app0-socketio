@@ -1,14 +1,24 @@
 
-const express=require('express');
+const express=require('express')
+const session=require('express-session')
+const cookieParser=require('cookie-parser')
+const fileStore=require('session-file-store')(session)
 const cors=require('cors')
 // const fs=require('fs').promises;  //it causes TypeError: fs.existsSync is not a function
-const fs=require('fs');
+const fs=require('fs')
 const app=express();
 const server=require('http').createServer(app);
 const sqlite3=require('sqlite3').verbose();
-let io=require('socket.io')(server,{cors:{origin:"*"}});
+
+const crypto = require('crypto')
+
+
+let io=require('socket.io')(server,{cors:{origin:"*"}})
 
 //const router=express.Router()
+const path=require('path')
+// app.set('view engine','ejs')
+// app.set('views',path.join(__dirname,'views'))
 
 //org 1605
 server.listen(1605,()=>{
@@ -74,13 +84,57 @@ tcp.listen(1600,function() {
 
 
 app.use(express.static(__dirname +'/public'))
-app.use(cors())
+app.use(cors({
+    origin:true, //vue주소
+    credentials:true,
+    //exposedHeaders: ["set-cookie"],
+    //methods: ['GET','POST'] 
+}))
 /*
 express.json() and express.urlencoded() are built-in middleware functions 
 to support JSON-encoded and URL-encoded bodies. 
 */
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use((req,res,next)=>{
+    console.log('미들웨어 통과전')
+    console.log(`req.session: ${req.session}`)
+    //console.log(`req.sessionId:${req.sessionID} `)
+
+    // res.header('Access-Control-Allow-Origin', 'http://localhost:1604');
+    // res.header('Access-Control-Allow-Credentials',true)
+    // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+
+    next()
+})
+
+//app.use(cookieParser('secret_key'))
+app.use(cookieParser())
+app.use( 
+    //사용자의 요청이 있을 때마다 session()함수를 실행시킨다. 그러면 session이 시작된다. (즉 우리 서비스가 session을 사용할 수 있게 된다.)
+    //이 객체 안에 있는 옵션에 따라 session이 동작하는 기본 방법이 달라진다.   
+    //뷰에서 axio할때마다 세션이 만들어져 계속해서 ... 
+    '/session/test',
+    session({ 
+        secret: 'safuProject',
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            secure: false, 
+            maxAge: 30000*10,
+            // expires: new date(Date.now()+3600000)
+        },
+        store: new fileStore,
+    })
+)
+app.use((req,res,next)=>{
+    res.header('Access-Control-Allow-Origin', 'http://localhost:1604');
+    res.header('Access-Control-Allow-Credentials',true)
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    console.log('미들웨어 라우터에 상관없이 무조건 실행:',req.session)
+    next()
+})
 
 // router.use((req,res,next)=>{
 //     console.log(req.method,req.url)
@@ -109,12 +163,18 @@ REST API(Representational State Transfer)
     put  /movies    update an existing movie
     delete /movies   delete an existing movie
 
-    REST API�� �����ϴ� �����񽺸� 'RESTful' �ϴٰ� �Ѵ�
+    REST API    'RESTful' 
 */
 
 app.get('/',(req,res)=>{
+    console.log('get---->')
     fs.readFile(__dirname + '/index.html')
     .then(contents=>{
+
+        // res.cookie('aaa','set Cookie')
+        // console.log('------------>\t\t',req.cookies)
+    
+
         res.setHeader("Content-Type","text/html",)
         //res.writeHead(200, {'Content-Type':'text/plain; charset=euc-kr' })
         res.writeHead(200)
@@ -133,6 +193,77 @@ app.get('/',(req,res)=>{
 
 })
 
+app.get('/session/test',(req,res)=>{
+
+    res.send({
+        'msg':"session test",
+    })
+
+})
+
+
+app.get('/cookie',(req,res)=>{
+
+    console.log( 'req.cookies:', req.cookies)
+    if(req.cookies['aaa']!=undefined) {
+        console.log(" cookie is -------->")
+    }
+    else {
+        console.log('no cookies---->')
+    }
+
+    res.send('cookie')
+
+})
+
+const cookieConfig = {
+    httpOnly: true, //웹서버로만 쿠키에 접근,자바스크립트로 전송은 막아
+    maxAge: 1000*60*60,
+    signed: false,  //쿠키의 암호화사용여부
+    secure: false, //https로 통신하는 경우에만 쿠키전송
+}
+app.post('/cookie/test',(req,res)=>{
+
+    const id=req.body.id
+    const passwd=req.body.passwd
+    console.log('req:',req.body)
+
+    res.cookie('aaa','set Cookie',cookieConfig)
+    // res.cookie('id',req.body.id,{maxAge:1000*60*60})
+    // res.cookie('passwd',req.body.passwd,{maxAge:1000*60*60})
+    res.cookie('id',req.body.id,cookieConfig)
+    res.cookie('passwd',req.body.passwd,cookieConfig)
+    console.log('------------>\t\t',req.cookies)
+    res.send({
+        'msg':"session test",
+    })
+    
+})
+    
+app.get('/session/test2',(req,res)=>{
+//     res.header('Access-Control-Allow-Credentials',true)
+// res.header('Access-Control-Allow-Origin', 'http://localhost:1605');
+// res.header('Access-Control-Allow-Credentials',true)
+// res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+    res.cookie('aaa','set Cookie')
+    res.cookie('id','valueOfId',{maxAge:1000*60*60})
+    res.cookie('passwd','valueOfpass',{maxAge:1000*60*60})
+    console.log('------------>\t\t',req.cookies)
+    res.send({
+        'msg':"session test",
+    })
+
+})
+app.post('/session/test2',(req,res)=>{
+    res.cookie('aaa','set Cookie')
+    console.log('------------>\t\t',req.cookies)
+    res.send({
+        'msg':"session test",
+    })
+
+})
+
 /*
     https://www.digitalocean.com/community/tutorials/use-expressjs-to-get-url-and-post-parameters
     To get information from client users.
@@ -144,8 +275,8 @@ app.get('/',(req,res)=>{
     request data No, return data Yes
 */
 app.get('/data',(req,res)=>{
-    res.header('Access-Control-Allow-Origin','*' )
-    res.writeHead(200, { 'Content-Type': 'application/json'});
+    //res.header('Access-Control-Allow-Origin','*' )
+    //res.writeHead(200, { 'Content-Type': 'application/json'});
     res.write(JSON.stringify({ message: "Hello Json"}));  
     res.end();  
 
@@ -171,7 +302,35 @@ http://localhost:1605/api/211
 router with params
 */
 
+app.get('/login',(req,res)=>{
+
+    console.log( 'req.cookies:', req.cookies)
+    if(req.cookies['aaa']!=undefined) {
+        console.log(" cookie is -------->")
+    }
+    else {
+        console.log('no cookies---->')
+    }
+
+    // if(req.session.num===undefined) {
+    //     req.session.num=1
+    // }
+    // else req.session.num+=1
+    // res.send(`${req.session.num} 번 접속`)
+    res.send('login')
+
+    // if(req.session) {
+    //     console.log('session:',req.session.name)
+    // }
+    // console.log('login')
+    // res.send('login')
+})
 app.get('/hello',(req,res)=>{
+    console.log('hello routing')
+    if(req.session) {
+        console.log('/hello:',req.session)
+    }
+
     res.send('this is sample route(/hello) with a route the way we are used to seeing it')
 })
 
@@ -181,6 +340,14 @@ app.get('/api/:version',(req,res)=>{
     // http://localhost:1605/api/211
     console.log('req.params:',req.params)
     console.log('req.params:',req.params.version)
+    console.log('session:',req.session.num)
+
+    if(req.params.version=='999') {
+        console.log('version==999')
+        delete req.session.num
+        req.session.save()
+    
+    }
     //res.send(req.params.verion)
     res.send( { 
         'test': 'wj test',
@@ -202,25 +369,81 @@ app.get('/api/users/:name',(req,res)=>{
     console.log('params:', req.params.name)
     res.send('Hello '+ req.name + '!')
 })
-const users =[
-    {id:1,name: '111'},
-    {id:2,name: '222'},
-    {id:3,name: '333'},
-]
 
-app.post('/data',(req,res)=>{
+app.post('/api/login',(req,res)=>{
 
     const id=req.body.id
-    const name=req.body.name
-    console.log('req:',req.body)
-    //res.send(users)
-    res.send({
-        'id': id,
-        'name': name
-    })
-    res.end()
-})
+    const passwd=req.body.passwd
+    // console.log('req:',req.body)
+    // res.cookie('jpos','jpos')
+    // console.log('------------>\t\t',req.cookies)
 
+    //
+    let db = new sqlite3.Database('./db/chinook.db');
+    //sql = `select * from users where id='wj'`;
+    sql = `select * from users where id='${req.body.id}'`;
+
+
+    db.get(sql,[],(err,row)=>{
+        if(err)  console.log('err:',err)
+        else {
+            //console.log('row:', row)
+            if(row==undefined)  res.json({'result':'id not found'})
+            else {
+                let sha256=crypto.createHash('sha256')
+                sha256.update(req.body.passwd)
+                let r=sha256.digest('base64')
+                //console.log('res\t\t',r)
+                if(row.passwd==r)  {
+                    //console.log('req:',req.body)
+                    res.cookie('jpos','jpos')
+                    //console.log('------------>\t\t',req.cookies)
+
+                    res.json({'result':'okay'})
+                }
+                else {
+                    res.json({'result':'passwd not match'})
+                    console.log('Hello------------------> r=',r)
+                }
+
+                // if(row.passwd==req.body.passwd)  res.json({'result':'okay'})
+                // else res.json({'result':'passwd not match'})
+                //console.log('row:', row.id,row.passwd)
+
+            }            
+        }
+        db.close();
+    })
+    return
+
+
+})
+app.post('/api/logout',(req,res)=>{
+    console.log('req:',req.body)
+
+    delete req.session.id
+    delete req.session.name
+    //delete req.sessioin.num
+    req.session.save(function() {
+        res.json({'result':'logout'})
+        
+    })
+
+
+})
+app.get('/api/logout',(req,res)=>{
+    console.log('req:',req.body)
+
+    //delete req.session.id
+    //delete req.session.name
+    delete req.sessioin.num
+    req.session.save(function() {
+        res.json({'result':'logout'})
+        
+    })
+
+
+})
 
 app.get('/db',(req,res)=>{
     let db = new sqlite3.Database('./db/chinook.db');
@@ -308,6 +531,22 @@ io.on("connection",socket=>{
                     console.log('err',err)
                 }
             })
+            // let cipher=crypto.createCipher('aes256','decodingkey')
+            // cipher.update('Hello','utf8','base64')
+            // let cipherd=cipher.final('base64')
+            // console.log('cipherd:',cipherd)
+            let msgToHash='1001'
+            let sha256=crypto.createHash('sha256')
+            sha256.update('1001')
+            //let res=sha256.digest('hex')
+            console.log('sha256:\t\t',sha256.digest('base64'))
+
+
+
+            
+
+            //console.log('res:\t\t',res)
+            // /mdf56rugwtv7Qm2TgNPhNy9rrQp2czNTruQ4Vr43XE=
 		}
 
 	}

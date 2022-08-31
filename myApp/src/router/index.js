@@ -82,15 +82,16 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    // beforeEnter : (to,from,next)=>{
-    //   console.log('bE', to.name)
-    //   console.log('bE',from.name)
-    //   console.log('bE',next.name)
-    //   next()
-    // }
-
-    
   },
+  {
+    path: '/aud',
+    name: 'Aud',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Aud.vue'),
+  },
+
   {
     path: '/login',
     name: 'Login',
@@ -119,7 +120,7 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(function(to,from,next){ //Àü¿ª³×ºñ°ÔÀÌ¼Ç°¡µå
+router.beforeEach(function(to,from,next){ //
   //if(this.$store.state.count) {
   //  console.log('bE',this.$store.state.count)
   //}
@@ -141,34 +142,27 @@ router.beforeEach(function(to,from,next){ //Àü¿ª³×ºñ°ÔÀÌ¼Ç°¡µå
       // console.log('bE',next.name)
 
 
-
-  let d=JSON.parse(sessionStorage.getItem('Bret'))
-  if(d) {
-    if(d.user=='Bret') {
-      console.log('Bret hit')
-      console.log('bE', to.path)
-      console.log('bE',from.path)
-      console.log('bE',next.name)
-  
+  //ìŠ¤í† ì–´ëŠ” ë¦¬í”„ë˜ì‹œì‹œ ì´ˆê¸°í™”ëœë‹¤!
+  let sessioinKey=JSON.parse(sessionStorage.getItem('wj'))
+  if(sessioinKey) {
+    if(sessioinKey.auth==true) {
+      console.log('Global Navigation Guard:\t\t',from.path,to.path)
       next()
     }
     else {
-      console.log('Not match:',d)
+      console.log('Not match:',sessioinKey)
       if(to.path=='/Login') next()
       else alert('Log in please!')
-      }
+    }
   
   }
   else {
-    console.log('No key!')
-    console.log('bE', to.path)
-    console.log('bE',from.path)
-    //next()
+    console.log('Global Navigation Guard::\t\t',from.path,to.path)
     if(to.path=='/Login') next()
     else if(to.path=='/') next()
     else if(to.path=='/touch') next()
-    else if(to.path=='/gsap') next()
     else if(to.path=='/about') next()
+    else if(to.path=='/aud') next()
 
   }
 

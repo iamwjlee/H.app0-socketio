@@ -1,5 +1,6 @@
 <template>
-    <div v-if="viewEnable">
+    <!-- <div v-if="viewEnable"> -->
+    <div>
         <i class="fa-solid fa-arrow-rotate-left"></i>
         <i class="fas fa-times"></i>
         <i class="fas fa-arrow-right"></i>

@@ -117,7 +117,10 @@ Web Storage Test <input type="text" placeholder="Enter string to store" v-model=
   </div>
 
 </div> -->
-<div style="background-color:#cdd; margin:auto; width:90%">{{today}} {{freeRunning}}</div>
+<div class="anim-header anim-test">test</div>
+<div style="background-color:#cdd; margin:auto; width:90%">{{today}} {{freeRunning}} {{tcpResponseHit}} </div>
+
+
 
 <div v-if="odtInfoDisplayEnable" class="c0">
 
@@ -125,15 +128,17 @@ Web Storage Test <input type="text" placeholder="Enter string to store" v-model=
         :key=index 
         class="i0" 
         :class="[index===tcpResponseHit? 'selected-item':'']"
-
         >
-      <div v-if="item.ip==='192.168.0.1'" class="i00">JW</div>    
-      <div v-else  class="i00">{{item.ip}}</div>    
 
-      <div class="i00">{{item.id}}</div>        
-      <div v-if="item.status[7]==='2'" class="i01"> 충전중</div>        
-      <div v-else-if="item.status[7]==='4'" class="i02"> 결제대기중</div>        
-      <div v-else class="i00">{{item.status[7]}}</div>        
+      <div @click="odtClick(index)">
+        <div v-if="item.ip==='192.168.0.1'" class="i00">JW</div>    
+        <div v-else  class="i00">{{item.ip}}</div>    
+
+        <div class="i00">{{item.id}}</div>        
+        <div v-if="item.status[7]==='2'" class="i01"> 충전중</div>        
+        <div v-else-if="item.status[7]==='4'" class="i02"> 결제대기중</div>        
+        <div v-else class="i00">{{item.status[7]}}</div>        
+      </div>
 
      
       
@@ -1075,6 +1080,7 @@ export default {
       ],
 
       odtInfoDisplayEnable: false,
+      odtInfoDisplayEnable2: false,
       // columns: [
       //   { 
       //     label: 'Name',
@@ -1149,6 +1155,7 @@ export default {
         })
         if(hit==false) {
             this.tcpList.push(data)
+            //console.log('tcpList\t\t',data)
         }
         else {
             this.tcpList.splice(hitIndex,1,data)  
@@ -1225,6 +1232,18 @@ export default {
       //},
       //deep: true
     //},
+
+    tcpResponseHit(val) {
+      console.log('watch\t\t',val,this.tcpList[val].status[7])
+      gsap.from(".anim-header", {
+        opacity:0.3, duration:0.6 , y:-10, 
+      })
+      gsap.to(".anim-header", {
+        opacity:1, duration:0.6 , y:0, 
+      })
+
+
+    },
     salesList: function(newData) {
       console.log('watch msg:', newData)
       this.salesList=newData
@@ -1241,6 +1260,16 @@ export default {
     }
   },
   methods: {
+    odtClick(index) {
+      console.log('odtClick\t\t',index)
+    },
+    odtInfo2() {
+      let d=this.getDateTime()
+      this.today=d.slice(0,11)
+      console.log('odt2\t\t',d,this.today)
+      this.odtInfoDisplayEnable2=!this.odtInfoDisplayEnable2
+
+    },
     odtInfo() {
       let d=this.getDateTime()
       this.today=d.slice(0,11)
@@ -1252,7 +1281,7 @@ export default {
           console.log('tcpList.id:',this.tcpList[i].ip,this.tcpList[i].id,this.tcpList[i].status)
         //console.log('tcpList',this.tcpList.length)
           if(this.tcpList[i].status[7]==='2') {
-          console.log('test', this.tcpList[i].status[7])
+          //console.log('test', this.tcpList[i].status[7])
           }
 
         }
@@ -1848,6 +1877,9 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+.anim-test{
+  background-color:#cdd; margin:auto; width:90%
 }
 .mylist {
   display: inline-block;
